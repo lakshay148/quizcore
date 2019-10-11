@@ -16,7 +16,7 @@ import com.quizcore.quizapp.model.network.response.BaseResponse;
 import com.quizcore.quizapp.model.network.response.question.AddQuestionResponse;
 import com.quizcore.quizapp.model.network.response.question.GetQuestionResponse;
 import com.quizcore.quizapp.model.network.response.question.UploadQuestionResponse;
-import com.quizcore.quizapp.services.QuestionService;
+import com.quizcore.quizapp.service.QuestionService;
 
 @RestController
 @RequestMapping("quizcore/api/v1/question")

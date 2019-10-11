@@ -1,9 +1,9 @@
-package com.quizcore.quizapp.services;
+package com.quizcore.quizapp.service;
 
 import java.util.List;
 import java.util.UUID;
 
-import com.quizcore.quizapp.services.base.IQuestionService;
+import com.quizcore.quizapp.service.base.IQuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

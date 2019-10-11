@@ -1,8 +1,8 @@
-package com.quizcore.quizapp.services;
+package com.quizcore.quizapp.service;
 
 import com.quizcore.quizapp.model.entity.Quiz;
 import com.quizcore.quizapp.model.entity.Result;
-import com.quizcore.quizapp.services.base.IResultService;
+import com.quizcore.quizapp.service.base.IResultService;
 
 import java.util.UUID;
 

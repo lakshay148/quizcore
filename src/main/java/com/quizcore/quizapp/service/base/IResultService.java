@@ -1,4 +1,4 @@
-package com.quizcore.quizapp.services.base;
+package com.quizcore.quizapp.service.base;
 
 import com.quizcore.quizapp.model.entity.Quiz;
 import com.quizcore.quizapp.model.entity.Result;
