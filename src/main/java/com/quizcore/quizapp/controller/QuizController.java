@@ -33,7 +33,7 @@ public class QuizController {
 	}
 	
 	@PostMapping("/add")
-	public BaseResponse<AddQuizResponse> addQuestion(@RequestBody AddQuestionRequest request){
+	public BaseResponse<AddQuizResponse> addQuiz(@RequestBody AddQuestionRequest request){
 		Quiz quiz = new Quiz();
 		UUID quizId = quizService.addQuiz(quiz);
 		BaseResponse<AddQuizResponse> response = new BaseResponse<>();

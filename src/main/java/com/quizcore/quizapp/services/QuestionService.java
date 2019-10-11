@@ -3,6 +3,7 @@ package com.quizcore.quizapp.services;
 import java.util.List;
 import java.util.UUID;
 
+import com.quizcore.quizapp.services.base.IQuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,7 +11,7 @@ import com.quizcore.quizapp.model.entity.Question;
 import com.quizcore.quizapp.model.repository.QuestionRepository;
 
 @Service
-public class QuestionService implements IQuestionService{
+public class QuestionService implements IQuestionService {
 
 
 	@Autowired

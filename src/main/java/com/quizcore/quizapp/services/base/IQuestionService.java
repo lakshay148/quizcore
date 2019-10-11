@@ -1,4 +1,4 @@
-package com.quizcore.quizapp.services;
+package com.quizcore.quizapp.services.base;
 
 import java.util.List;
 import java.util.UUID;
