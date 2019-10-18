@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository;
 import com.quizcore.quizapp.model.entity.Question;
 
 @Repository
-public interface QuestionRepository extends CrudRepository<Question, UUID> {
+public interface QuestionRepository /*extends CrudRepository<Question, UUID>*/ {
 
 }

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.quizcore.quizapp.model.entity.Quiz;
-import com.quizcore.quizapp.model.network.request.AddQuestionRequest;
+import com.quizcore.quizapp.model.network.request.question.AddQuestionRequest;
 import com.quizcore.quizapp.model.network.response.BaseResponse;
 import com.quizcore.quizapp.model.network.response.quiz.AddQuizResponse;
 import com.quizcore.quizapp.model.network.response.quiz.GetQuizResponse;

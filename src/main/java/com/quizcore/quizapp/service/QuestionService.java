@@ -14,15 +14,14 @@ import com.quizcore.quizapp.model.repository.QuestionRepository;
 public class QuestionService implements IQuestionService {
 
 
-	@Autowired
-	QuestionRepository questionRepository;
+//	@Autowired
+//	QuestionRepository questionRepository;
 	
 	@Override
 	public UUID addQuestion(Question question) {
 		// TODO Auto-generated method stub
-		Question addedQuestion = questionRepository.save(question);
 		System.out.println("question added " + question.id);
-		return addedQuestion.id;
+		return question.id;
 	}
 
 	@Override

@@ -1,4 +1,4 @@
-package com.quizcore.quizapp.model.network.request;
+package com.quizcore.quizapp.model.network.request.question;
 
 public class AddQuestionRequest {
 	String statement;
