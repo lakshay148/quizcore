@@ -43,7 +43,7 @@ public class QuizController {
 	}
 	
 	@PostMapping("/upload")
-	public BaseResponse<UploadQuizResponse> uploadQuestion(){
+	public BaseResponse<UploadQuizResponse> uploadQuiz(){
 		BaseResponse<UploadQuizResponse> response = new BaseResponse<>();
 		response.message = "It works awesone";
 		response.status = 200;
@@ -51,11 +51,42 @@ public class QuizController {
 	}
 	
 	@GetMapping("{quizId}")
-	public BaseResponse<GetQuizResponse> getQuestion(@PathVariable("quizId") String quizId){
+	public BaseResponse<GetQuizResponse> getQuiz(@PathVariable("quizId") String quizId){
 		BaseResponse<GetQuizResponse> response = new BaseResponse<>();
 		response.message = "It works awesone";
 		response.status = 200;
 		return response;
 	}
-	
+
+	@GetMapping("{quizId}/question")
+	public BaseResponse<GetQuizResponse> getQuizQuestions(@PathVariable("quizId") String quizId){
+		BaseResponse<GetQuizResponse> response = new BaseResponse<>();
+		response.message = "It works awesone";
+		response.status = 200;
+		return response;
+	}
+
+	@PostMapping("{quizId}/start")
+	public BaseResponse<UploadQuizResponse> startQuiz(){
+		BaseResponse<UploadQuizResponse> response = new BaseResponse<>();
+		response.message = "It works awesone";
+		response.status = 200;
+		return response;
+	}
+
+	@PostMapping("{quizId}/submit")
+	public BaseResponse<UploadQuizResponse> submitQuiz(){
+		BaseResponse<UploadQuizResponse> response = new BaseResponse<>();
+		response.message = "It works awesone";
+		response.status = 200;
+		return response;
+	}
+
+	@GetMapping("{quizId}/result")
+	public BaseResponse<GetQuizResponse> getQuizResult(@PathVariable("quizId") String quizId){
+		BaseResponse<GetQuizResponse> response = new BaseResponse<>();
+		response.message = "It works awesone";
+		response.status = 200;
+		return response;
+	}
 }
