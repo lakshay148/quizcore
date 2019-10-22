@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.quizcore.quizapp.model.entity.Quiz;
 import com.quizcore.quizapp.model.network.request.question.AddQuestionRequest;
-import com.quizcore.quizapp.model.network.response.BaseResponse;
+import com.quizcore.quizapp.model.network.response.SuccessResponse;
 import com.quizcore.quizapp.model.network.response.quiz.AddQuizResponse;
 import com.quizcore.quizapp.model.network.response.quiz.GetQuizResponse;
 import com.quizcore.quizapp.model.network.response.quiz.UploadQuizResponse;
@@ -25,68 +25,52 @@ public class QuizController {
 	QuizService quizService;
 	
 	@GetMapping("/healthcheck")
-	public BaseResponse<Object> checkHealth() {
-		BaseResponse<Object> response = new BaseResponse<>();
-		response.message = "It works awesone";
-		response.status = 200;
+	public SuccessResponse<Object> checkHealth() {
+		SuccessResponse<Object> response = new SuccessResponse<>("It works awesone");
 		return response;
 	}
 	
 	@PostMapping("/add")
-	public BaseResponse<AddQuizResponse> addQuiz(@RequestBody AddQuestionRequest request){
+	public SuccessResponse<AddQuizResponse> addQuiz(@RequestBody AddQuestionRequest request){
 		Quiz quiz = new Quiz();
 		UUID quizId = quizService.addQuiz(quiz);
-		BaseResponse<AddQuizResponse> response = new BaseResponse<>();
-		response.message = "quiz added successfully";
-		response.status = 200;
+		SuccessResponse<AddQuizResponse> response = new SuccessResponse<>("It works awesone");
 		return response;
 	}
 	
 	@PostMapping("/upload")
-	public BaseResponse<UploadQuizResponse> uploadQuiz(){
-		BaseResponse<UploadQuizResponse> response = new BaseResponse<>();
-		response.message = "It works awesone";
-		response.status = 200;
+	public SuccessResponse<UploadQuizResponse> uploadQuiz(){
+		SuccessResponse<UploadQuizResponse> response = new SuccessResponse<>("It works awesone");
 		return response;
 	}
 	
 	@GetMapping("{quizId}")
-	public BaseResponse<GetQuizResponse> getQuiz(@PathVariable("quizId") String quizId){
-		BaseResponse<GetQuizResponse> response = new BaseResponse<>();
-		response.message = "It works awesone";
-		response.status = 200;
+	public SuccessResponse<GetQuizResponse> getQuiz(@PathVariable("quizId") String quizId){
+		SuccessResponse<GetQuizResponse> response = new SuccessResponse<>("It works awesone");
 		return response;
 	}
 
 	@GetMapping("{quizId}/question")
-	public BaseResponse<GetQuizResponse> getQuizQuestions(@PathVariable("quizId") String quizId){
-		BaseResponse<GetQuizResponse> response = new BaseResponse<>();
-		response.message = "It works awesone";
-		response.status = 200;
+	public SuccessResponse<GetQuizResponse> getQuizQuestions(@PathVariable("quizId") String quizId){
+		SuccessResponse<GetQuizResponse> response = new SuccessResponse<>("It works awesone");
 		return response;
 	}
 
 	@PostMapping("{quizId}/start")
-	public BaseResponse<UploadQuizResponse> startQuiz(){
-		BaseResponse<UploadQuizResponse> response = new BaseResponse<>();
-		response.message = "It works awesone";
-		response.status = 200;
+	public SuccessResponse<UploadQuizResponse> startQuiz(){
+		SuccessResponse<UploadQuizResponse> response = new SuccessResponse<>("It works awesone");
 		return response;
 	}
 
 	@PostMapping("{quizId}/submit")
-	public BaseResponse<UploadQuizResponse> submitQuiz(){
-		BaseResponse<UploadQuizResponse> response = new BaseResponse<>();
-		response.message = "It works awesone";
-		response.status = 200;
+	public SuccessResponse<UploadQuizResponse> submitQuiz(){
+		SuccessResponse<UploadQuizResponse> response = new SuccessResponse<>("It works awesone");
 		return response;
 	}
 
 	@GetMapping("{quizId}/result")
-	public BaseResponse<GetQuizResponse> getQuizResult(@PathVariable("quizId") String quizId){
-		BaseResponse<GetQuizResponse> response = new BaseResponse<>();
-		response.message = "It works awesone";
-		response.status = 200;
+	public SuccessResponse<GetQuizResponse> getQuizResult(@PathVariable("quizId") String quizId){
+		SuccessResponse<GetQuizResponse> response = new SuccessResponse<>("It works awesone");
 		return response;
 	}
 }

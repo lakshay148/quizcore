@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.quizcore.quizapp.model.entity.Question;
 import com.quizcore.quizapp.model.network.request.question.AddQuestionRequest;
-import com.quizcore.quizapp.model.network.response.BaseResponse;
+import com.quizcore.quizapp.model.network.response.SuccessResponse;
 import com.quizcore.quizapp.model.network.response.question.AddQuestionResponse;
 import com.quizcore.quizapp.model.network.response.question.GetQuestionResponse;
 import com.quizcore.quizapp.model.network.response.question.UploadQuestionResponse;
@@ -30,20 +30,16 @@ public class QuestionController {
 	QuestionService questionService;
 	
 	@GetMapping("/healthcheck")
-	public BaseResponse<Object> checkHealth() {
-		BaseResponse<Object> response = new BaseResponse<>();
-		response.message = "It works awesone";
-		response.status = 200;
+	public SuccessResponse<Object> checkHealth() {
+		SuccessResponse<Object> response = new SuccessResponse<>("It works awesone");
 		return response;
 	}
 	
 	@PostMapping("/add")
-	public BaseResponse<AddQuestionResponse> addQuestion(@RequestBody AddQuestionRequest request){
+	public SuccessResponse<AddQuestionResponse> addQuestion(@RequestBody AddQuestionRequest request){
 		Question question = new Question(request.getStatement(), request.getType(),request.getLevel(), request.getSubject());
 		UUID questionId = questionService.addQuestion(question);
-		BaseResponse<AddQuestionResponse> response = new BaseResponse<>();
-		response.message = "question added successfully";
-		response.status = 200;
+		SuccessResponse<AddQuestionResponse> response = new SuccessResponse<>("It works awesone");
 		AddQuestionResponse addQuestion = new AddQuestionResponse();
 		addQuestion.questionId = questionId;
 		response.data = addQuestion;
@@ -51,8 +47,8 @@ public class QuestionController {
 	}
 	
 	@PostMapping("/upload")
-	public BaseResponse<UploadQuestionResponse> uploadQuestion(@RequestParam("file") MultipartFile questionFile, @RequestParam("type") String questionFileType) throws IOException {
-		BaseResponse<UploadQuestionResponse> response = new BaseResponse<>();
+	public SuccessResponse<UploadQuestionResponse> uploadQuestion(@RequestParam("file") MultipartFile questionFile, @RequestParam("type") String questionFileType) throws IOException {
+		SuccessResponse<UploadQuestionResponse> response = new SuccessResponse<>("It works awesone");
 
 		List<Question> questionList = new ArrayList<Question>();
 		XSSFWorkbook workbook = new XSSFWorkbook(questionFile.getInputStream());
@@ -93,17 +89,13 @@ public class QuestionController {
 		}
 		UploadQuestionResponse questionResponse = new UploadQuestionResponse();
 		questionResponse.question = questionList.get(0).statement;
-		response.message = "It works awesone";
-		response.status = 200;
 		response.data = questionResponse;
 		return response;
 	}
 	
 	@GetMapping("/{questionId}")
-	public BaseResponse<GetQuestionResponse> getQuestion(@PathVariable("questionId") String questionId){
-		BaseResponse<GetQuestionResponse> response = new BaseResponse<>();
-		response.message = "It works awesone";
-		response.status = 200;
+	public SuccessResponse<GetQuestionResponse> getQuestion(@PathVariable("questionId") String questionId){
+		SuccessResponse<GetQuestionResponse> response = new SuccessResponse<>("It works awesone");
 		return response;
 	}
 	

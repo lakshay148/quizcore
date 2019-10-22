@@ -1,6 +1,6 @@
 package com.quizcore.quizapp.model.network.response;
 
-public class BaseResponse<T> {
+public abstract class BaseResponse<T> {
 
 	public String message;
 	public int status;
