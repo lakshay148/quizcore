@@ -41,4 +41,10 @@ public class UserService implements IUserService {
 		return savedUser;
 	}
 
+	@Override
+	public User getUserByEmailOrPhone(User user) {
+		User savedUser = userRepository.findByEmailOrPhone(user.getEmail(), user.getPhone());
+		return savedUser;
+	}
+
 }

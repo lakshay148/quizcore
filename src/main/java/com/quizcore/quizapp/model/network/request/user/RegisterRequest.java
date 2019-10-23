@@ -6,7 +6,16 @@ public class RegisterRequest {
 	String email;
 	String password;
 	String phone;
-	
+	String secret;
+
+	public String getSecret() {
+		return secret;
+	}
+
+	public void setSecret(String secret) {
+		this.secret = secret;
+	}
+
 	public String getName() {
 		return name;
 	}

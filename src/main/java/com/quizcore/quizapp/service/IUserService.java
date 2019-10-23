@@ -10,5 +10,6 @@ public interface IUserService {
 	User getUserById(User user);
 	UUID addUser(User user);
 	User getUserByEmail(User user);
+	User getUserByEmailOrPhone(User user);
 
 }

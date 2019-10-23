@@ -80,15 +80,15 @@ public class User {
 	public UUID id;
 
 	@Column(name = "name")
-		public String name;
+	public String name;
 
 	@Column(name= "email")
-		public String email;
+	public String email;
 
 	@Column(name = "password")
-		public String password;
+	public String password;
 
 	@Column(name = "phone")
-		public String phone;
+	public String phone;
 }
 

@@ -11,5 +11,6 @@ import com.quizcore.quizapp.model.entity.User;
 public interface UserRepository extends CrudRepository<User, UUID>{
 	
 	User findByEmail(String email);
+	User findByEmailOrPhone(String email, String mobile);
 	
 }
