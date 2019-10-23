@@ -8,7 +8,16 @@ public class LoginResponse {
 	private String email;
 	private String message;
 	private String name;
-	
+	private String mobile;
+
+	public String getMobile() {
+		return mobile;
+	}
+
+	public void setMobile(String mobile) {
+		this.mobile = mobile;
+	}
+
 	public UUID getId() {
 		return id;
 	}

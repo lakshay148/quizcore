@@ -5,19 +5,19 @@ import java.util.UUID;
 import com.quizcore.quizapp.model.network.request.user.LoginRequest;
 import com.quizcore.quizapp.model.network.response.ErrorResponse;
 import com.quizcore.quizapp.model.network.response.SuccessResponse;
+import com.quizcore.quizapp.model.network.response.user.UserActivityResponse;
+import com.quizcore.quizapp.model.network.response.user.UserDetailsResponse;
 import com.quizcore.quizapp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.quizcore.quizapp.model.entity.User;
 import com.quizcore.quizapp.model.network.request.user.RegisterRequest;
 import com.quizcore.quizapp.model.network.response.BaseResponse;
 import com.quizcore.quizapp.model.network.response.user.LoginResponse;
 import com.quizcore.quizapp.model.network.response.user.RegistrationResponse;
+
+import javax.websocket.server.PathParam;
 
 @RestController
 @RequestMapping("quizcore/api/v1/user")
@@ -80,6 +80,60 @@ public class UserController {
 			return response;
 		}
 	}
+
+	@GetMapping("/{userId}")
+	public BaseResponse<UserDetailsResponse> userDetails(@PathVariable("userId") String userId)
+	{
+		if(userId == null) {
+			ErrorResponse<UserDetailsResponse> response = new ErrorResponse<>("Please provide userId", null);
+			return response;
+		}
+		User user = new User(UUID.fromString(userId));
+		User savedUser = userService.getUserById(user);
+		if(savedUser != null)
+		{
+			SuccessResponse<UserDetailsResponse> response = new SuccessResponse<>("User found !!");
+			UserDetailsResponse loginResponse = new UserDetailsResponse();
+			loginResponse.setEmail(savedUser.email);
+			loginResponse.setId(savedUser.id);
+			loginResponse.setName(savedUser.getName());
+			loginResponse.setMobile(savedUser.getPhone());
+			response.data = loginResponse;
+			return response;
+		}
+		else
+		{
+			ErrorResponse<UserDetailsResponse> response = new ErrorResponse<>("No User found !!", null);
+			return response;
+		}
+	}
+
+	@GetMapping("/{userId}/activity")
+	public BaseResponse<UserActivityResponse> userActivity(@PathVariable("userId") String userId){
+		if(userId == null) {
+			ErrorResponse<UserActivityResponse> response = new ErrorResponse<>("Please provide userId", null);
+			return response;
+		}
+		User user = new User(UUID.fromString(userId));
+		User savedUser = userService.getUserById(user);
+		if(savedUser != null)
+		{
+			SuccessResponse<UserActivityResponse> response = new SuccessResponse<>("User found !!");
+			UserActivityResponse loginResponse = new UserActivityResponse();
+			loginResponse.setEmail(savedUser.email);
+			loginResponse.setId(savedUser.id);
+			loginResponse.setName(savedUser.getName());
+			loginResponse.setMobile(savedUser.getPhone());
+			response.data = loginResponse;
+			return response;
+		}
+		else
+		{
+			ErrorResponse<UserActivityResponse> response = new ErrorResponse<>("No User found !!", null);
+			return response;
+		}
+	}
+
 
 }
 

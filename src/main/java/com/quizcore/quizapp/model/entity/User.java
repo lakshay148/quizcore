@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
 
 @Entity
 public class User {
@@ -22,7 +23,11 @@ public class User {
 		this.password=password;
 		this.phone=phone;
 	}
-	
+
+	public User(UUID id) {
+		this.id = id;
+	}
+
 	public User(String email, String password) {
 		super();
 		this.email = email;
@@ -72,11 +77,9 @@ public class User {
 
 	@Id
 	@GeneratedValue(generator = "UUID")
-	@GenericGenerator(
-			name = "UUID",
-			strategy = "org.hibernate.id.UUIDGenerator"
-			)
+	@GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
 	@Column(name = "id", updatable = false, nullable = false)
+	@Type(type="uuid-char")
 	public UUID id;
 
 	@Column(name = "name")
