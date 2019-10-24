@@ -1,6 +1,7 @@
 package com.quizcore.quizapp.model.entity;
 
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,6 +18,7 @@ public class Product {
             name = "UUID",
             strategy = "org.hibernate.id.UUIDGenerator"
     )
+    @Type(type="uuid-char")
     UUID id;
 
     @Column
