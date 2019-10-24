@@ -26,7 +26,7 @@ public class QuizController {
 	
 	@GetMapping("/healthcheck")
 	public SuccessResponse<Object> checkHealth() {
-		SuccessResponse<Object> response = new SuccessResponse<>("It works awesone");
+		SuccessResponse<Object> response = new SuccessResponse<>("It works awesome");
 		return response;
 	}
 	
