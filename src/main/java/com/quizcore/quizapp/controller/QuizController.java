@@ -2,6 +2,7 @@ package com.quizcore.quizapp.controller;
 
 import java.util.UUID;
 
+import com.quizcore.quizapp.model.network.request.quiz.AddQuizRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,7 +32,7 @@ public class QuizController {
 	}
 	
 	@PostMapping("/add")
-	public SuccessResponse<AddQuizResponse> addQuiz(@RequestBody AddQuestionRequest request){
+	public SuccessResponse<AddQuizResponse> addQuiz(@RequestBody AddQuizRequest request){
 		Quiz quiz = new Quiz();
 		UUID quizId = quizService.addQuiz(quiz);
 		SuccessResponse<AddQuizResponse> response = new SuccessResponse<>("It works awesone");
@@ -44,7 +45,7 @@ public class QuizController {
 		return response;
 	}
 	
-	@GetMapping("{quizId}")
+	@GetMapping("/{quizId}")
 	public SuccessResponse<GetQuizResponse> getQuiz(@PathVariable("quizId") String quizId){
 		SuccessResponse<GetQuizResponse> response = new SuccessResponse<>("It works awesone");
 		return response;
