@@ -36,6 +36,13 @@ public class Product {
     @Column
     String type;
 
+    public Product(String description, String email, String mobile, String type, String name) {
+    }
+
+    public Product(UUID id) {
+        this.id = id;
+    }
+
     @Override
     public String toString() {
         return "Product{" +
@@ -86,4 +93,13 @@ public class Product {
     public void setType(String type) {
         this.type = type;
     }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
 }
