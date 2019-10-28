@@ -15,4 +15,6 @@ public class MasterDataController {
         SuccessResponse<Object> response = new SuccessResponse<>("It works awesone");
         return response;
     }
+
+    //TODO add subject,level,category,type of questions and quiz (MCQ,Audio)  in master data
 }

@@ -77,12 +77,9 @@ public class QuestionController {
 			options.add(option4);
 			row.getCell(5).getNumericCellValue();
 
-			Answer answer = new Answer();
-			int[] answers = new int[2];
-			answer.options = answers;
-			question.setAnswer(answer);
+			question.setAnswer("");
 			question.setType("MCQ");
-			question.setOptions(options);
+			question.setOptions("");
 			questionList.add(question);
 
 			System.out.println("question " + question.toString());

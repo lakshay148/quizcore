@@ -5,7 +5,15 @@ import java.util.UUID;
 
 import com.quizcore.quizapp.model.Answer;
 import com.quizcore.quizapp.model.other.Option;
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+
+@Entity
 public class Question {
 	
 	public Question(){
@@ -19,33 +27,47 @@ public class Question {
 		this.subject = subject;
 	}
 
+	@Id
+	@GeneratedValue(generator = "UUID")
+	@GenericGenerator(
+			name = "UUID",
+			strategy = "org.hibernate.id.UUIDGenerator"
+	)
+	@Column(name = "id", updatable = false, nullable = false)
+	@Type(type="uuid-char")
 	public UUID id;
-	
+
+	@Column
 	public String statement;
-	
+
+	@Column
 	public String type;
-	
+
+	@Column
 	public int level;
-	
+
+	@Column
 	public String subject;
 
-	public List<Option> options;
+	@Column
+	public String options;
 
-	public Answer answer;
+	@Column
+	public String answer;
 
-	public List<Option> getOptions() {
+	public String getOptions() {
 		return options;
 	}
 
-	public void setOptions(List<Option> options) {
+	public void setOptions(String options) {
 		this.options = options;
 	}
 
-	public Answer getAnswer() {
+	public String getAnswer() {
 		return answer;
 	}
 
-	public void setAnswer(Answer answer) {
+	public void setAnswer(String answer) {
 		this.answer = answer;
 	}
 
