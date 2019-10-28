@@ -1,5 +1,7 @@
 package com.quizcore.quizapp.model.network.response;
 
+import com.quizcore.quizapp.model.entity.Product;
+
 public class SuccessResponse<T> extends BaseResponse<T> {
 
     public int status = 0;

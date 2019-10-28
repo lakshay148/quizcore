@@ -10,6 +10,6 @@ import java.util.UUID;
 @Repository
 public interface ProductRepository extends CrudRepository<Product, UUID> {
 
-    Product findByEmailOrPhone(String email, String mobile);
+    Product findByEmailOrMobile(String email, String mobile);
 
 }

@@ -43,14 +43,40 @@ public class OnboardingController {
             SuccessResponse<ProductResponse> response = new SuccessResponse<>("Product registered successfully");
             ProductResponse productResponse = new ProductResponse();
             productResponse.setProductkey(addedProduct.getId());
+            productResponse.setEmail(addedProduct.getEmail());
+            productResponse.setMobile(addedProduct.getMobile());
+            productResponse.setType(addedProduct.getType());
+            productResponse.setTitle(addedProduct.getTitle());
             response.data = productResponse;
             return response;
     }
 
     @GetMapping("/product/{productKey}")
-    public SuccessResponse<Object> getProduct(@PathParam("productKey") String productKey) {
-        SuccessResponse<Object> response = new SuccessResponse<>("It works awesone");
-        return response;
+    public BaseResponse<ProductResponse> getProduct(@PathVariable("productKey") String productKey)
+    {
+        if(productKey == null) {
+            ErrorResponse<ProductResponse> response = new ErrorResponse<>("Please provide Productkey", null);
+            return response;
+        }
+            Product product = new Product(UUID.fromString(productKey));
+            Product addedProduct = onboardingService.getProductByKey(product);
+            if(addedProduct != null)
+            {
+                SuccessResponse<ProductResponse> response = new SuccessResponse<>("Product found !!");
+                ProductResponse productDetails = new ProductResponse();
+                productDetails.setProductkey(addedProduct.getId());
+                productDetails.setEmail(addedProduct.getEmail());
+                productDetails.setMobile(addedProduct.getMobile());
+                productDetails.setTitle(addedProduct.getTitle());
+                productDetails.setType(addedProduct.getType());
+                response.data = productDetails;
+                return response;
+            }
+            else
+            {
+                ErrorResponse<ProductResponse> response = new ErrorResponse<>("No Product found !!", null);
+                return response;
+            }
     }
 
     @PostMapping("/product/{productId}/partner")

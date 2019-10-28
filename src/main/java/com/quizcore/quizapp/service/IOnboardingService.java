@@ -11,5 +11,6 @@ public interface IOnboardingService {
     Product onboardProduct(Product product);
     ProductPartner onboardPartner(ProductPartner partner);
     UUID addProduct(Product product);
-    User getProductByEmailOrPhone(Product product);
+    Product getProductByEmailOrPhone(Product product);
+    Product getProductByKey(Product product);
 }

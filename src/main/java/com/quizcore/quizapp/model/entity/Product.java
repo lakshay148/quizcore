@@ -35,10 +35,19 @@ public class Product {
     String type;
 
     public Product(String description, String email, String mobile, String type, String name) {
+        this.description = description;
+        this.email = email;
+        this.mobile = mobile;
+        this.type = type;
+        this.title = name;
     }
 
     public Product(UUID id) {
         this.id = id;
+    }
+
+    public Product() {
+
     }
 
     @Override
