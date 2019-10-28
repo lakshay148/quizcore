@@ -5,16 +5,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import com.quizcore.quizapp.model.entity.Options;
 import com.quizcore.quizapp.model.entity.Question;
 import com.quizcore.quizapp.model.network.request.quiz.AddQuizRequest;
-import com.quizcore.quizapp.model.other.Option;
+import com.quizcore.quizapp.model.repository.OptionsRespository;
+import com.quizcore.quizapp.model.repository.QuestionRepository;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import com.quizcore.quizapp.model.entity.Quiz;
-import com.quizcore.quizapp.model.network.request.question.AddQuestionRequest;
 import com.quizcore.quizapp.model.network.response.SuccessResponse;
 import com.quizcore.quizapp.model.network.response.quiz.AddQuizResponse;
 import com.quizcore.quizapp.model.network.response.quiz.GetQuizResponse;
@@ -28,6 +29,12 @@ public class QuizController {
 	
 	@Autowired
 	QuizService quizService;
+
+	@Autowired
+	OptionsRespository optionsRespository;
+
+	@Autowired
+	QuestionRepository questionRepository;
 	
 	@GetMapping("/healthcheck")
 	public SuccessResponse<Object> checkHealth() {
@@ -62,8 +69,8 @@ public class QuizController {
 		String category = quizDetails.getRow(i+6).getCell(1).getStringCellValue();
 		int duration =  ((int)quizDetails.getRow(i+7).getCell(1).getNumericCellValue());
 		String type = quizDetails.getRow(i+8).getCell(1).getStringCellValue();
-		double correctMarks = quizDetails.getRow(i+9).getCell(1).getNumericCellValue();
-		double inCorrectMarks = quizDetails.getRow(i+10).getCell(1).getNumericCellValue();
+		int correctMarks = (int)quizDetails.getRow(i+9).getCell(1).getNumericCellValue();
+		int inCorrectMarks = (int)quizDetails.getRow(i+10).getCell(1).getNumericCellValue();
 		double price = quizDetails.getRow(i+11).getCell(1).getNumericCellValue();
 
 
@@ -72,7 +79,10 @@ public class QuizController {
 			System.out.println("key "+row.getCell(0) + " value " + row.getCell(1));
 		}
 
+		Quiz quiz = new Quiz(UUID.fromString("46f7c71a-79c8-4c71-a945-037fe3cee855"), title, description, instructions, level, subject, category, duration, price, type, correctMarks, inCorrectMarks);
+
 		List<Question> questionList = new ArrayList<Question>();
+		String questions = null;
 
 		for(int k=1;k<questionDetails.getPhysicalNumberOfRows() ;k++) {
 			Question question = new Question();
@@ -81,28 +91,29 @@ public class QuizController {
 			question.setLevel(level);
 			question.setStatement(row.getCell(0).getStringCellValue());
 			question.setSubject(subject);
-			Option option1 = new Option();
-			option1.setText(row.getCell(1).getStringCellValue());
-			Option option2 = new Option();
-			option2.setText(row.getCell(2).getStringCellValue());
-			Option option3 = new Option();
-			option3.setText(row.getCell(3).getStringCellValue());
-			Option option4 = new Option();
-			option4.setText(row.getCell(4).getStringCellValue());
 
-			List<Option> options = new ArrayList<>();
-			options.add(option1);
-			options.add(option2);
-			options.add(option3);
-			options.add(option4);
+			Options savedOption1 =  optionsRespository.save(new Options(row.getCell(1).getStringCellValue()));
+			Options savedOption2 =  optionsRespository.save(new Options(row.getCell(2).getStringCellValue()));
+			Options savedOption3 =  optionsRespository.save(new Options(row.getCell(3).getStringCellValue()));
+			Options savedOption4 =  optionsRespository.save(new Options(row.getCell(4).getStringCellValue()));
+
 
 			question.setAnswer("");
 			question.setType(type);
-			question.setOptions("");
-			questionList.add(question);
+			question.setOptions(savedOption1.id + "," + savedOption2.id + "," + savedOption3.id+"," + savedOption4.id);
 
-			System.out.println("question " + question.toString());
+			Question savedQuestion = questionRepository.save(question);
+			questionList.add(savedQuestion);
+
+			questions = questions == null ? question.id + "" : questions+","+question.id;
+
+			System.out.println("question " + savedQuestion.toString());
 		}
+
+		quiz.setQuestions(questions);
+
+		quizService.uploadQuiz(quiz);
+
 		return response;
 	}
 	

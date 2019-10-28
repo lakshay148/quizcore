@@ -1,10 +1,7 @@
 package com.quizcore.quizapp.model.entity;
 
-import java.util.List;
 import java.util.UUID;
 
-import com.quizcore.quizapp.model.Answer;
-import com.quizcore.quizapp.model.other.Option;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 
@@ -29,10 +26,7 @@ public class Question {
 
 	@Id
 	@GeneratedValue(generator = "UUID")
-	@GenericGenerator(
-			name = "UUID",
-			strategy = "org.hibernate.id.UUIDGenerator"
-	)
+	@GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
 	@Column(name = "id", updatable = false, nullable = false)
 	@Type(type="uuid-char")
 	public UUID id;
