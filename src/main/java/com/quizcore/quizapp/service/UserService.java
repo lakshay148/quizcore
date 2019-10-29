@@ -1,17 +1,13 @@
 
 package com.quizcore.quizapp.service;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.Optional;
 import java.util.UUID;
 
+import com.quizcore.quizapp.service.base.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.quizcore.quizapp.model.entity.Quiz;
 import com.quizcore.quizapp.model.entity.User;
 import com.quizcore.quizapp.model.repository.UserRepository;
 

@@ -1,11 +1,13 @@
 package com.quizcore.quizapp.controller;
 
+import com.quizcore.quizapp.model.entity.Partner;
 import com.quizcore.quizapp.model.entity.Product;
 import com.quizcore.quizapp.model.network.request.onboarding.AddPartnerRequest;
 import com.quizcore.quizapp.model.network.request.onboarding.AddProductRequest;
 import com.quizcore.quizapp.model.network.response.BaseResponse;
 import com.quizcore.quizapp.model.network.response.ErrorResponse;
 import com.quizcore.quizapp.model.network.response.SuccessResponse;
+import com.quizcore.quizapp.model.network.response.partner.PartnerResponse;
 import com.quizcore.quizapp.model.network.response.product.ProductResponse;
 import com.quizcore.quizapp.service.OnboardingService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -80,16 +82,52 @@ public class OnboardingController {
     }
 
     @PostMapping("/product/{productId}/partner")
-    public SuccessResponse<Object> addPartner(@RequestBody AddPartnerRequest request) {
-        System.out.println("request " + request.toString());
-        SuccessResponse<Object> response = new SuccessResponse<>("It works awesone");
+    public BaseResponse<PartnerResponse> addPartner(@PathVariable("productId") String productId,@RequestBody AddPartnerRequest request)
+    {
+        Partner partner = new Partner(UUID.fromString(productId),request.getEmail(), request.getDescription(), request.getMobile(), request.getName());
+        Partner partnerKey = onboardingService.getPartnerByEmailOrMobile(partner);
+
+        if(partnerKey != null)
+        {
+            ErrorResponse<PartnerResponse> response = new ErrorResponse<>("Partner already exists", null);
+            return response;
+        }
+
+        Partner addedPartner = onboardingService.onboardPartner(partner);
+        SuccessResponse<PartnerResponse> response = new SuccessResponse<>("Product registered successfully");
+        PartnerResponse partnerResponse = new PartnerResponse();
+        partnerResponse.setPartnerkey(addedPartner.getId());
+        partnerResponse.setEmail(addedPartner.getEmail());
+        partnerResponse.setMobile(addedPartner.getMobile());
+        partnerResponse.setTitle(addedPartner.getTitle());
+        response.data = partnerResponse;
         return response;
     }
 
     @GetMapping("/product/{productId}/partner")
-    public SuccessResponse<Object> getPartners(@PathParam("productId") String productId) {
-        SuccessResponse<Object> response = new SuccessResponse<>("It works awesone");
-        return response;
+    public BaseResponse<PartnerResponse> getPartners(@PathVariable("productId") String productId) {
+        if(productId == null) {
+            ErrorResponse<PartnerResponse> response = new ErrorResponse<>("Please provide ProductId", null);
+            return response;
+        }
+//           Product product = new Product(UUID.fromString(productId));
+//           Partner List<String> addedPartners = onboardingService.getPartnersByProduct(product);
+//           if(addedPartners[0]    != null) {
+//               SuccessResponse<ProductResponse> response = new SuccessResponse<>("List Of Partners found !!");
+//               PartnerResponse partnersDetails = new PartnerResponse();
+//               partnersDetails.setEmail(addedPartners.getEmail());
+//               partnersDetails.setMobile(addedPartners.getMobile());
+//               partnersDetails.setTitle(addedPartners.getTitle());
+//               partnersDetails.setDescription(addedPartners.getDescription());
+//               response.data = partnersDetails;
+//               return response;
+//           }
+//           else
+//           {
+//               ErrorResponse<ProductResponse> response = new ErrorResponse<>("No Product found !!", null);
+//               return response;
+//           }
+        return null;
     }
 
     @GetMapping("/product/{productId}/partner/{partnerId}")
