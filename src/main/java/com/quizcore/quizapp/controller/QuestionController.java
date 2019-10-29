@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import com.quizcore.quizapp.model.Answer;
-import com.quizcore.quizapp.model.other.Option;
+import com.quizcore.quizapp.model.entity.Options;
+import com.quizcore.quizapp.model.repository.OptionsRespository;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -28,6 +28,9 @@ public class QuestionController {
 	
 	@Autowired
 	QuestionService questionService;
+
+	@Autowired
+	OptionsRespository optionsRespository;
 	
 	@GetMapping("/healthcheck")
 	public SuccessResponse<Object> checkHealth() {
@@ -61,21 +64,10 @@ public class QuestionController {
 			question.setLevel((int) row.getCell(6).getNumericCellValue());
 			question.setStatement(row.getCell(0).getStringCellValue());
 			question.setSubject(row.getCell(7).getStringCellValue());
-			Option option1 = new Option();
-			option1.setText(row.getCell(1).getStringCellValue());
-			Option option2 = new Option();
-			option2.setText(row.getCell(2).getStringCellValue());
-			Option option3 = new Option();
-			option3.setText(row.getCell(3).getStringCellValue());
-			Option option4 = new Option();
-			option4.setText(row.getCell(4).getStringCellValue());
-
-			List<Option> options = new ArrayList<>();
-			options.add(option1);
-			options.add(option2);
-			options.add(option3);
-			options.add(option4);
-			row.getCell(5).getNumericCellValue();
+			Options savedOption1 =  optionsRespository.save(new Options(row.getCell(1).getStringCellValue()));
+			Options savedOption2 =  optionsRespository.save(new Options(row.getCell(2).getStringCellValue()));
+			Options savedOption3 =  optionsRespository.save(new Options(row.getCell(3).getStringCellValue()));
+			Options savedOption4 =  optionsRespository.save(new Options(row.getCell(4).getStringCellValue()));
 
 			question.setAnswer("");
 			question.setType("MCQ");

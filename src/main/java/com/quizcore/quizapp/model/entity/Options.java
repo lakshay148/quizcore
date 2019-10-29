@@ -14,17 +14,20 @@ public class Options {
 
     @Id
     @GeneratedValue(generator = "UUID")
-    @GenericGenerator(
-            name = "UUID",
-            strategy = "org.hibernate.id.UUIDGenerator"
-    )
+    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     @Column(name = "id", updatable = false, nullable = false)
     @Type(type="uuid-char")
     public UUID id;
 
-
     @Column
-    String text;
+    String optionText;
+
+    public Options() {
+    }
+
+    public Options(String text) {
+        this.optionText = text;
+    }
 
     public UUID getId() {
         return id;
@@ -35,10 +38,10 @@ public class Options {
     }
 
     public String getText() {
-        return text;
+        return optionText;
     }
 
     public void setText(String text) {
-        this.text = text;
+        this.optionText = text;
     }
 }

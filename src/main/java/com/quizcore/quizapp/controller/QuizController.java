@@ -1,24 +1,22 @@
 package com.quizcore.quizapp.controller;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
-import com.quizcore.quizapp.model.entity.Question;
+import com.quizcore.quizapp.model.Answer;
+import com.quizcore.quizapp.model.entity.*;
 import com.quizcore.quizapp.model.network.request.quiz.AddQuizRequest;
-import com.quizcore.quizapp.model.other.Option;
+import com.quizcore.quizapp.model.network.request.quiz.SubmitQuizRequest;
+import com.quizcore.quizapp.model.network.response.quiz.*;
+import com.quizcore.quizapp.model.repository.OptionsRespository;
+import com.quizcore.quizapp.model.repository.QuestionRepository;
+import com.quizcore.quizapp.model.repository.UserActivityRepository;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import com.quizcore.quizapp.model.entity.Quiz;
-import com.quizcore.quizapp.model.network.request.question.AddQuestionRequest;
 import com.quizcore.quizapp.model.network.response.SuccessResponse;
-import com.quizcore.quizapp.model.network.response.quiz.AddQuizResponse;
-import com.quizcore.quizapp.model.network.response.quiz.GetQuizResponse;
-import com.quizcore.quizapp.model.network.response.quiz.UploadQuizResponse;
 import com.quizcore.quizapp.service.QuizService;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -28,6 +26,15 @@ public class QuizController {
 	
 	@Autowired
 	QuizService quizService;
+
+	@Autowired
+	OptionsRespository optionsRespository;
+
+	@Autowired
+	QuestionRepository questionRepository;
+
+	@Autowired
+	UserActivityRepository userActivityRepository;
 	
 	@GetMapping("/healthcheck")
 	public SuccessResponse<Object> checkHealth() {
@@ -62,8 +69,8 @@ public class QuizController {
 		String category = quizDetails.getRow(i+6).getCell(1).getStringCellValue();
 		int duration =  ((int)quizDetails.getRow(i+7).getCell(1).getNumericCellValue());
 		String type = quizDetails.getRow(i+8).getCell(1).getStringCellValue();
-		double correctMarks = quizDetails.getRow(i+9).getCell(1).getNumericCellValue();
-		double inCorrectMarks = quizDetails.getRow(i+10).getCell(1).getNumericCellValue();
+		int correctMarks = (int)quizDetails.getRow(i+9).getCell(1).getNumericCellValue();
+		int inCorrectMarks = (int)quizDetails.getRow(i+10).getCell(1).getNumericCellValue();
 		double price = quizDetails.getRow(i+11).getCell(1).getNumericCellValue();
 
 
@@ -72,7 +79,10 @@ public class QuizController {
 			System.out.println("key "+row.getCell(0) + " value " + row.getCell(1));
 		}
 
+		Quiz quiz = new Quiz(UUID.fromString("46f7c71a-79c8-4c71-a945-037fe3cee855"), title, description, instructions, level, subject, category, duration, price, type, correctMarks, inCorrectMarks);
+
 		List<Question> questionList = new ArrayList<Question>();
+		String questions = null;
 
 		for(int k=1;k<questionDetails.getPhysicalNumberOfRows() ;k++) {
 			Question question = new Question();
@@ -81,58 +91,86 @@ public class QuizController {
 			question.setLevel(level);
 			question.setStatement(row.getCell(0).getStringCellValue());
 			question.setSubject(subject);
-			Option option1 = new Option();
-			option1.setText(row.getCell(1).getStringCellValue());
-			Option option2 = new Option();
-			option2.setText(row.getCell(2).getStringCellValue());
-			Option option3 = new Option();
-			option3.setText(row.getCell(3).getStringCellValue());
-			Option option4 = new Option();
-			option4.setText(row.getCell(4).getStringCellValue());
 
-			List<Option> options = new ArrayList<>();
-			options.add(option1);
-			options.add(option2);
-			options.add(option3);
-			options.add(option4);
+			Options savedOption1 =  optionsRespository.save(new Options(row.getCell(1).getStringCellValue()));
+			Options savedOption2 =  optionsRespository.save(new Options(row.getCell(2).getStringCellValue()));
+			Options savedOption3 =  optionsRespository.save(new Options(row.getCell(3).getStringCellValue()));
+			Options savedOption4 =  optionsRespository.save(new Options(row.getCell(4).getStringCellValue()));
+
 
 			question.setAnswer("");
 			question.setType(type);
-			question.setOptions("");
-			questionList.add(question);
+			question.setOptions(savedOption1.id + "," + savedOption2.id + "," + savedOption3.id+"," + savedOption4.id);
 
-			System.out.println("question " + question.toString());
+			Question savedQuestion = questionRepository.save(question);
+			questionList.add(savedQuestion);
+
+			questions = questions == null ? question.id + "" : questions+","+question.id;
+
+			System.out.println("question " + savedQuestion.toString());
 		}
+
+		quiz.setQuestions(questions);
+
+		UUID quizId = quizService.uploadQuiz(quiz);
+		response.data = new UploadQuizResponse(quizId);
 		return response;
 	}
 	
 	@GetMapping("/{quizId}")
-	public SuccessResponse<GetQuizResponse> getQuiz(@PathVariable("quizId") String quizId){
-		SuccessResponse<GetQuizResponse> response = new SuccessResponse<>("It works awesone");
+	public SuccessResponse<GetQuizDetailsResponse> getQuizDetails(@PathVariable("quizId") String quizId){
+		SuccessResponse<GetQuizDetailsResponse> response = new SuccessResponse<>("Quiz Details");
+		Quiz savedQuiz = quizService.getQuiz(UUID.fromString(quizId));
+		savedQuiz.setQuestions(null);
+		savedQuiz.setPartnerId(null);
+		response.data = new GetQuizDetailsResponse(savedQuiz);
 		return response;
 	}
 
 	@GetMapping("{quizId}/question")
-	public SuccessResponse<GetQuizResponse> getQuizQuestions(@PathVariable("quizId") String quizId){
-		SuccessResponse<GetQuizResponse> response = new SuccessResponse<>("It works awesone");
+	public SuccessResponse<GetQuizQuestionsResponse> getQuizQuestions(@PathVariable("quizId") String quizId){
+		SuccessResponse<GetQuizQuestionsResponse> response = new SuccessResponse<>("Quiz Questions");
+		ArrayList<Question> questions = (ArrayList<Question>) quizService.getQuestions(UUID.fromString(quizId));
+		GetQuizQuestionsResponse questionsResponse = new GetQuizQuestionsResponse();
+		questionsResponse.setQuestions(questions);
+		response.data = questionsResponse;
 		return response;
 	}
 
 	@PostMapping("{quizId}/start")
-	public SuccessResponse<UploadQuizResponse> startQuiz(){
-		SuccessResponse<UploadQuizResponse> response = new SuccessResponse<>("It works awesone");
+	public SuccessResponse<StartQuizResponse> startQuiz(@PathVariable("quizId") String quizId, @RequestHeader("token") String userToken){
+		SuccessResponse<StartQuizResponse> response = new SuccessResponse<>("It works awesone");
+		UserActivityLog startQuizLog = quizService.startQuiz(UUID.fromString(quizId), UUID.fromString(userToken));
+		StartQuizResponse startQuizResponse = new StartQuizResponse();
+		startQuizResponse.setQuizStartTime(startQuizLog.getCreatedTime());
+		response.data = startQuizResponse;
 		return response;
 	}
 
 	@PostMapping("{quizId}/submit")
-	public SuccessResponse<UploadQuizResponse> submitQuiz(){
-		SuccessResponse<UploadQuizResponse> response = new SuccessResponse<>("It works awesone");
+	public SuccessResponse<EndQuizResponse> submitQuiz(@PathVariable("quizId") String quizId , @RequestBody SubmitQuizRequest submitQuizRequest, @RequestHeader("token") String userToken){
+		SuccessResponse<EndQuizResponse> response = new SuccessResponse<>("Quiz Submitted Successfully");
+		HashMap<UUID, List<UUID>> answers = new HashMap<>();
+		List<Answer> answersArray = submitQuizRequest.getAnswer();
+		for(Answer answer : answersArray){
+			List<UUID> optionsId = Arrays.asList(answer.getOptions());
+			answers.put(answer.getQuestionId(), optionsId);
+		}
+		Result quizResult = quizService.submitQuiz(UUID.fromString(quizId),UUID.fromString(userToken), answers);
+		EndQuizResponse endQuizResponse = new EndQuizResponse();
+		endQuizResponse.setResult(quizResult);
+		endQuizResponse.setEndTime(quizResult.createdTime);
+		response.data = endQuizResponse;
 		return response;
 	}
 
 	@GetMapping("{quizId}/result")
-	public SuccessResponse<GetQuizResponse> getQuizResult(@PathVariable("quizId") String quizId){
-		SuccessResponse<GetQuizResponse> response = new SuccessResponse<>("It works awesone");
+	public SuccessResponse<QuizResultResponse> getQuizResult(@PathVariable("quizId") String quizId, @RequestHeader("token") String userToken){
+		SuccessResponse<QuizResultResponse> response = new SuccessResponse<>("Result Found");
+		Result quizResult = quizService.getQuizResult(UUID.fromString(quizId), UUID.fromString(userToken));
+		QuizResultResponse resultResponse = new QuizResultResponse();
+		resultResponse.setResult(quizResult);
+		response.data = resultResponse;
 		return response;
 	}
 }

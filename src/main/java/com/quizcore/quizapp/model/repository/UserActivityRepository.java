@@ -1,12 +1,11 @@
 package com.quizcore.quizapp.model.repository;
 
-import java.util.UUID;
+import com.quizcore.quizapp.model.entity.UserActivityLog;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
-import com.quizcore.quizapp.model.entity.Question;
+import java.util.UUID;
 
 @Repository
-public interface QuestionRepository extends CrudRepository<Question, UUID> {
-
+public interface UserActivityRepository extends CrudRepository<UserActivityLog, UUID> {
 }

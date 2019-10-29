@@ -15,15 +15,13 @@ public class Quiz {
 	
 	@Id
 	@GeneratedValue(generator = "UUID")
-	@GenericGenerator(
-		name = "UUID",
-		strategy = "org.hibernate.id.UUIDGenerator"
-	)
+	@GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
 	@Column(name = "id", updatable = false, nullable = false)
 	@Type(type="uuid-char")
 	public UUID id;
 
 	@Column
+	@Type(type="uuid-char")
 	UUID partnerId;
 
 	@Column
@@ -61,6 +59,35 @@ public class Quiz {
 
 	@Column
 	int incorrectMarks;
+
+	@Column
+	int passingCriteria;
+
+	public int getPassingCriteria() {
+		return passingCriteria;
+	}
+
+	public void setPassingCriteria(int passingCriteria) {
+		this.passingCriteria = passingCriteria;
+	}
+
+	public Quiz() {
+	}
+
+	public Quiz(UUID partnerId, String title, String description, String instructions, int level, String subject, String category, int duration, double payment, String type, int correctMarks, int incorrectMarks) {
+		this.partnerId = partnerId;
+		this.title = title;
+		this.description = description;
+		this.instructions = instructions;
+		this.level = level;
+		this.subject = subject;
+		this.category = category;
+		this.duration = duration;
+		this.payment = payment;
+		this.type = type;
+		this.correctMarks = correctMarks;
+		this.incorrectMarks = incorrectMarks;
+	}
 
 	public int getCorrectMarks() {
 		return correctMarks;
