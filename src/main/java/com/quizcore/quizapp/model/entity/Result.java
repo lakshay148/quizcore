@@ -1,5 +1,6 @@
 package com.quizcore.quizapp.model.entity;
 
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 
@@ -7,6 +8,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
@@ -27,6 +29,15 @@ public class Result {
     @Column(name = "userId", updatable = false, nullable = false)
     public UUID userId;
 
+    public Result(UUID quizId, UUID userId, double score) {
+        this.quizId = quizId;
+        this.userId = userId;
+        this.score = score;
+    }
+
+    public Result() {
+    }
+
     @Column
     double score;
 
@@ -35,6 +46,17 @@ public class Result {
 
     @Column
     String description;
+
+    @CreationTimestamp
+    public LocalDateTime createdTime;
+
+    public LocalDateTime getCreatedTime() {
+        return createdTime;
+    }
+
+    public void setCreatedTime(LocalDateTime createdTime) {
+        this.createdTime = createdTime;
+    }
 
     public UUID getId() {
         return id;

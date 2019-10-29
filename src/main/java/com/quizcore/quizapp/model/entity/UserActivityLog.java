@@ -25,11 +25,28 @@ public class UserActivityLog {
     @Type(type="uuid-char")
     public UUID userId;
 
+    @Column(name = "quizId")
+    @Type(type="uuid-char")
+    public UUID quizId;
+
     @Column
     public String action;
 
+    public UserActivityLog(UUID userId, String action) {
+        this.userId = userId;
+        this.action = action;
+    }
+
     @CreationTimestamp
     public LocalDateTime createdTime;
+
+    public UUID getQuizId() {
+        return quizId;
+    }
+
+    public void setQuizId(UUID quizId) {
+        this.quizId = quizId;
+    }
 
     public UUID getId() {
         return id;

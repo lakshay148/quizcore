@@ -1,13 +1,12 @@
 package com.quizcore.quizapp.controller;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
-import com.quizcore.quizapp.model.entity.Options;
-import com.quizcore.quizapp.model.entity.Question;
+import com.quizcore.quizapp.model.Answer;
+import com.quizcore.quizapp.model.entity.*;
 import com.quizcore.quizapp.model.network.request.quiz.AddQuizRequest;
+import com.quizcore.quizapp.model.network.request.quiz.SubmitQuizRequest;
 import com.quizcore.quizapp.model.network.response.quiz.*;
 import com.quizcore.quizapp.model.repository.OptionsRespository;
 import com.quizcore.quizapp.model.repository.QuestionRepository;
@@ -17,7 +16,6 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import com.quizcore.quizapp.model.entity.Quiz;
 import com.quizcore.quizapp.model.network.response.SuccessResponse;
 import com.quizcore.quizapp.service.QuizService;
 import org.springframework.web.multipart.MultipartFile;
@@ -140,20 +138,39 @@ public class QuizController {
 	}
 
 	@PostMapping("{quizId}/start")
-	public SuccessResponse<StartQuizResponse> startQuiz(){
+	public SuccessResponse<StartQuizResponse> startQuiz(@PathVariable("quizId") String quizId, @RequestHeader("token") String userToken){
 		SuccessResponse<StartQuizResponse> response = new SuccessResponse<>("It works awesone");
+		UserActivityLog startQuizLog = quizService.startQuiz(UUID.fromString(quizId), UUID.fromString(userToken));
+		StartQuizResponse startQuizResponse = new StartQuizResponse();
+		startQuizResponse.setQuizStartTime(startQuizLog.getCreatedTime());
+		response.data = startQuizResponse;
 		return response;
 	}
 
 	@PostMapping("{quizId}/submit")
-	public SuccessResponse<UploadQuizResponse> submitQuiz(){
-		SuccessResponse<UploadQuizResponse> response = new SuccessResponse<>("It works awesone");
+	public SuccessResponse<EndQuizResponse> submitQuiz(@PathVariable("quizId") String quizId , @RequestBody SubmitQuizRequest submitQuizRequest, @RequestHeader("token") String userToken){
+		SuccessResponse<EndQuizResponse> response = new SuccessResponse<>("Quiz Submitted Successfully");
+		HashMap<UUID, List<UUID>> answers = new HashMap<>();
+		List<Answer> answersArray = submitQuizRequest.getAnswer();
+		for(Answer answer : answersArray){
+			List<UUID> optionsId = Arrays.asList(answer.getOptions());
+			answers.put(answer.getQuestionId(), optionsId);
+		}
+		Result quizResult = quizService.submitQuiz(UUID.fromString(quizId),UUID.fromString(userToken), answers);
+		EndQuizResponse endQuizResponse = new EndQuizResponse();
+		endQuizResponse.setResult(quizResult);
+		endQuizResponse.setEndTime(quizResult.createdTime);
+		response.data = endQuizResponse;
 		return response;
 	}
 
 	@GetMapping("{quizId}/result")
-	public SuccessResponse<QuizResultResponse> getQuizResult(@PathVariable("quizId") String quizId){
-		SuccessResponse<QuizResultResponse> response = new SuccessResponse<>("It works awesone");
+	public SuccessResponse<QuizResultResponse> getQuizResult(@PathVariable("quizId") String quizId, @RequestHeader("token") String userToken){
+		SuccessResponse<QuizResultResponse> response = new SuccessResponse<>("Result Found");
+		Result quizResult = quizService.getQuizResult(UUID.fromString(quizId), UUID.fromString(userToken));
+		QuizResultResponse resultResponse = new QuizResultResponse();
+		resultResponse.setResult(quizResult);
+		response.data = resultResponse;
 		return response;
 	}
 }

@@ -60,6 +60,17 @@ public class Quiz {
 	@Column
 	int incorrectMarks;
 
+	@Column
+	int passingCriteria;
+
+	public int getPassingCriteria() {
+		return passingCriteria;
+	}
+
+	public void setPassingCriteria(int passingCriteria) {
+		this.passingCriteria = passingCriteria;
+	}
+
 	public Quiz() {
 	}
 
