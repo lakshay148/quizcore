@@ -8,8 +8,10 @@ import java.util.UUID;
 import com.quizcore.quizapp.model.entity.Options;
 import com.quizcore.quizapp.model.entity.Question;
 import com.quizcore.quizapp.model.network.request.quiz.AddQuizRequest;
+import com.quizcore.quizapp.model.network.response.quiz.*;
 import com.quizcore.quizapp.model.repository.OptionsRespository;
 import com.quizcore.quizapp.model.repository.QuestionRepository;
+import com.quizcore.quizapp.model.repository.UserActivityRepository;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -17,9 +19,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import com.quizcore.quizapp.model.entity.Quiz;
 import com.quizcore.quizapp.model.network.response.SuccessResponse;
-import com.quizcore.quizapp.model.network.response.quiz.AddQuizResponse;
-import com.quizcore.quizapp.model.network.response.quiz.GetQuizResponse;
-import com.quizcore.quizapp.model.network.response.quiz.UploadQuizResponse;
 import com.quizcore.quizapp.service.QuizService;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -35,6 +34,9 @@ public class QuizController {
 
 	@Autowired
 	QuestionRepository questionRepository;
+
+	@Autowired
+	UserActivityRepository userActivityRepository;
 	
 	@GetMapping("/healthcheck")
 	public SuccessResponse<Object> checkHealth() {
@@ -112,26 +114,34 @@ public class QuizController {
 
 		quiz.setQuestions(questions);
 
-		quizService.uploadQuiz(quiz);
-
+		UUID quizId = quizService.uploadQuiz(quiz);
+		response.data = new UploadQuizResponse(quizId);
 		return response;
 	}
 	
 	@GetMapping("/{quizId}")
-	public SuccessResponse<GetQuizResponse> getQuiz(@PathVariable("quizId") String quizId){
-		SuccessResponse<GetQuizResponse> response = new SuccessResponse<>("It works awesone");
+	public SuccessResponse<GetQuizDetailsResponse> getQuizDetails(@PathVariable("quizId") String quizId){
+		SuccessResponse<GetQuizDetailsResponse> response = new SuccessResponse<>("Quiz Details");
+		Quiz savedQuiz = quizService.getQuiz(UUID.fromString(quizId));
+		savedQuiz.setQuestions(null);
+		savedQuiz.setPartnerId(null);
+		response.data = new GetQuizDetailsResponse(savedQuiz);
 		return response;
 	}
 
 	@GetMapping("{quizId}/question")
-	public SuccessResponse<GetQuizResponse> getQuizQuestions(@PathVariable("quizId") String quizId){
-		SuccessResponse<GetQuizResponse> response = new SuccessResponse<>("It works awesone");
+	public SuccessResponse<GetQuizQuestionsResponse> getQuizQuestions(@PathVariable("quizId") String quizId){
+		SuccessResponse<GetQuizQuestionsResponse> response = new SuccessResponse<>("Quiz Questions");
+		ArrayList<Question> questions = (ArrayList<Question>) quizService.getQuestions(UUID.fromString(quizId));
+		GetQuizQuestionsResponse questionsResponse = new GetQuizQuestionsResponse();
+		questionsResponse.setQuestions(questions);
+		response.data = questionsResponse;
 		return response;
 	}
 
 	@PostMapping("{quizId}/start")
-	public SuccessResponse<UploadQuizResponse> startQuiz(){
-		SuccessResponse<UploadQuizResponse> response = new SuccessResponse<>("It works awesone");
+	public SuccessResponse<StartQuizResponse> startQuiz(){
+		SuccessResponse<StartQuizResponse> response = new SuccessResponse<>("It works awesone");
 		return response;
 	}
 
@@ -142,8 +152,8 @@ public class QuizController {
 	}
 
 	@GetMapping("{quizId}/result")
-	public SuccessResponse<GetQuizResponse> getQuizResult(@PathVariable("quizId") String quizId){
-		SuccessResponse<GetQuizResponse> response = new SuccessResponse<>("It works awesone");
+	public SuccessResponse<QuizResultResponse> getQuizResult(@PathVariable("quizId") String quizId){
+		SuccessResponse<QuizResultResponse> response = new SuccessResponse<>("It works awesone");
 		return response;
 	}
 }
