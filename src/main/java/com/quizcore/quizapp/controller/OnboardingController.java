@@ -3,11 +3,13 @@ package com.quizcore.quizapp.controller;
 import com.quizcore.quizapp.model.entity.Partner;
 import com.quizcore.quizapp.model.entity.Product;
 import com.quizcore.quizapp.model.entity.Question;
+import com.quizcore.quizapp.model.entity.Quiz;
 import com.quizcore.quizapp.model.network.request.onboarding.AddPartnerRequest;
 import com.quizcore.quizapp.model.network.request.onboarding.AddProductRequest;
 import com.quizcore.quizapp.model.network.response.BaseResponse;
 import com.quizcore.quizapp.model.network.response.ErrorResponse;
 import com.quizcore.quizapp.model.network.response.SuccessResponse;
+import com.quizcore.quizapp.model.network.response.partner.GetPartnerQuizResponse;
 import com.quizcore.quizapp.model.network.response.partner.GetProductPartnersResponse;
 import com.quizcore.quizapp.model.network.response.partner.PartnerResponse;
 import com.quizcore.quizapp.model.network.response.product.ProductResponse;
@@ -120,8 +122,12 @@ public class OnboardingController {
 
 
     @GetMapping("/product/{productId}/partner/{partnerId}")
-    public SuccessResponse<Object> getPartnerDetails(@PathParam("productId") String productId, @PathParam("partnerId") String partnerId) {
-        SuccessResponse<Object> response = new SuccessResponse<>("It works awesone");
+    public SuccessResponse<GetPartnerQuizResponse> getPartnerQuiz(@PathVariable("productId") String productId, @PathVariable("partnerId") String partnerId) {
+        SuccessResponse<GetPartnerQuizResponse> response = new SuccessResponse<>("Partner Quizes");
+        ArrayList<Quiz> quizes = (ArrayList<Quiz>) onboardingService.getQuizes(UUID.fromString(partnerId));
+        GetPartnerQuizResponse quizesResponse = new GetPartnerQuizResponse();
+        quizesResponse.setQuizes(quizes);
+        response.data = quizesResponse;
         return response;
     }
 }

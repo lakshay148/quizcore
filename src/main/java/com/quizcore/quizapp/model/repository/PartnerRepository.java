@@ -2,6 +2,7 @@ package com.quizcore.quizapp.model.repository;
 
 import com.quizcore.quizapp.model.entity.Partner;
 import com.quizcore.quizapp.model.entity.Product;
+import com.quizcore.quizapp.model.entity.Quiz;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
