@@ -9,7 +9,8 @@ import com.quizcore.quizapp.service.base.IOnboardingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class OnboardingService implements IOnboardingService {
@@ -33,7 +34,6 @@ public class OnboardingService implements IOnboardingService {
     }
 
 
-
     public Product getProductByEmailOrPhone(Product product) {
         Product productSaved = productRepository.findByEmailOrMobile(product.getEmail(), product.getMobile());
         return productSaved;
@@ -42,7 +42,7 @@ public class OnboardingService implements IOnboardingService {
     public Product getProductByKey(Product product) {
         Optional<Product> productSaved = productRepository.findById(product.getId());
         Product productByKey = null;
-        if(productSaved.isPresent()){
+        if (productSaved.isPresent()) {
             productByKey = productSaved.get();
         }
         return productByKey;
@@ -53,9 +53,11 @@ public class OnboardingService implements IOnboardingService {
         return partnerSaved;
     }
 
-    public Partner getPartnersByProduct(Product product) {
-//        Iterable<Partner> partnerSaved = partnerRepository.findAllById(product.getId());
-//        Partner partnersByProductId = null;
-        return null;
+    public List<Partner> getPartners(UUID productId) {
+        List<Partner> partners = partnerRepository.findAllByProductId(productId);
+        return partners;
     }
+
+
 }
+

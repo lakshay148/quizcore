@@ -35,6 +35,9 @@ public class Partner {
     @Column
     String description;
 
+    public Partner() {
+    }
+
     public Partner(UUID fromString) {
     }
 

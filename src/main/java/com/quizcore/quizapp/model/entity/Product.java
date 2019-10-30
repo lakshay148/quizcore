@@ -34,6 +34,7 @@ public class Product {
     @Column
     String type;
 
+
     public Product(String description, String email, String mobile, String type, String name) {
         this.description = description;
         this.email = email;
