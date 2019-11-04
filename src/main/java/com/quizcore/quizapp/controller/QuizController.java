@@ -139,7 +139,7 @@ public class QuizController {
 
 	@PostMapping("{quizId}/start")
 	public SuccessResponse<StartQuizResponse> startQuiz(@PathVariable("quizId") String quizId, @RequestHeader("token") String userToken){
-		SuccessResponse<StartQuizResponse> response = new SuccessResponse<>("It works awesone");
+		SuccessResponse<StartQuizResponse> response = new SuccessResponse<>("Quiz Started");
 		UserActivityLog startQuizLog = quizService.startQuiz(UUID.fromString(quizId), UUID.fromString(userToken));
 		StartQuizResponse startQuizResponse = new StartQuizResponse();
 		startQuizResponse.setQuizStartTime(startQuizLog.getCreatedTime());
