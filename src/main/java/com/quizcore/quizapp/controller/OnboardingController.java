@@ -14,6 +14,7 @@ import com.quizcore.quizapp.model.network.response.partner.GetProductPartnersRes
 import com.quizcore.quizapp.model.network.response.partner.PartnerResponse;
 import com.quizcore.quizapp.model.network.response.product.ProductResponse;
 import com.quizcore.quizapp.model.network.response.quiz.GetQuizQuestionsResponse;
+import com.quizcore.quizapp.model.other.Validity;
 import com.quizcore.quizapp.service.OnboardingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -90,6 +91,12 @@ public class OnboardingController {
     @PostMapping("/product/{productId}/partner")
     public BaseResponse<PartnerResponse> addPartner(@PathVariable("productId") String productId,@RequestBody AddPartnerRequest request)
     {
+        Validity requestValidity = request.validateRequest(request);
+        if(!requestValidity.isValid()){
+            ErrorResponse<PartnerResponse> response = new ErrorResponse<>(requestValidity.getMessage(), null);
+            return response;
+        }
+
         Partner partner = new Partner(UUID.fromString(productId),request.getEmail(), request.getDescription(), request.getMobile(), request.getName());
         Partner partnerKey = onboardingService.getPartnerByEmailOrMobile(partner);
 
@@ -100,7 +107,7 @@ public class OnboardingController {
         }
 
         Partner addedPartner = onboardingService.onboardPartner(partner);
-        SuccessResponse<PartnerResponse> response = new SuccessResponse<>("Product registered successfully");
+        SuccessResponse<PartnerResponse> response = new SuccessResponse<>("Partner registered successfully");
         PartnerResponse partnerResponse = new PartnerResponse();
         partnerResponse.setPartnerkey(addedPartner.getId());
         partnerResponse.setEmail(addedPartner.getEmail());

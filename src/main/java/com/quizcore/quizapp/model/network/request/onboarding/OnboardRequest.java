@@ -1,6 +1,9 @@
 package com.quizcore.quizapp.model.network.request.onboarding;
 
-public class OnboardRequest {
+import com.quizcore.quizapp.model.network.request.BaseRequest;
+import com.quizcore.quizapp.model.other.Validity;
+
+public class OnboardRequest extends BaseRequest<OnboardRequest> {
     String name;
     String email;
     String mobile;
@@ -46,5 +49,23 @@ public class OnboardRequest {
                 ", mobile='" + mobile + '\'' +
                 ", description='" + description + '\'' +
                 '}';
+    }
+
+    @Override
+    public Validity validateRequest(OnboardRequest request) {
+        Validity nonNullValidity = checkNonNull(request);
+        if(!nonNullValidity.isValid())
+            return nonNullValidity;
+        return new Validity(true, "valid");
+    }
+
+    public Validity checkNonNull(OnboardRequest request){
+        if(request.email == null){
+            return new Validity(false, "invalid email");
+        }
+        if(request.mobile == null){
+            return new Validity(false, "invalid mobile");
+        }
+        return new Validity(true, "valid");
     }
 }
