@@ -1,17 +1,25 @@
 package com.quizcore.quizapp.controller;
 
+import com.quizcore.quizapp.model.entity.Partner;
 import com.quizcore.quizapp.model.entity.Product;
+import com.quizcore.quizapp.model.entity.Question;
+import com.quizcore.quizapp.model.entity.Quiz;
 import com.quizcore.quizapp.model.network.request.onboarding.AddPartnerRequest;
 import com.quizcore.quizapp.model.network.request.onboarding.AddProductRequest;
 import com.quizcore.quizapp.model.network.response.BaseResponse;
 import com.quizcore.quizapp.model.network.response.ErrorResponse;
 import com.quizcore.quizapp.model.network.response.SuccessResponse;
+import com.quizcore.quizapp.model.network.response.partner.GetPartnerQuizResponse;
+import com.quizcore.quizapp.model.network.response.partner.GetProductPartnersResponse;
+import com.quizcore.quizapp.model.network.response.partner.PartnerResponse;
 import com.quizcore.quizapp.model.network.response.product.ProductResponse;
+import com.quizcore.quizapp.model.network.response.quiz.GetQuizQuestionsResponse;
 import com.quizcore.quizapp.service.OnboardingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.websocket.server.PathParam;
+import java.util.ArrayList;
 import java.util.UUID;
 
 @RestController
@@ -80,21 +88,46 @@ public class OnboardingController {
     }
 
     @PostMapping("/product/{productId}/partner")
-    public SuccessResponse<Object> addPartner(@RequestBody AddPartnerRequest request) {
-        System.out.println("request " + request.toString());
-        SuccessResponse<Object> response = new SuccessResponse<>("It works awesone");
+    public BaseResponse<PartnerResponse> addPartner(@PathVariable("productId") String productId,@RequestBody AddPartnerRequest request)
+    {
+        Partner partner = new Partner(UUID.fromString(productId),request.getEmail(), request.getDescription(), request.getMobile(), request.getName());
+        Partner partnerKey = onboardingService.getPartnerByEmailOrMobile(partner);
+
+        if(partnerKey != null)
+        {
+            ErrorResponse<PartnerResponse> response = new ErrorResponse<>("Partner already exists", null);
+            return response;
+        }
+
+        Partner addedPartner = onboardingService.onboardPartner(partner);
+        SuccessResponse<PartnerResponse> response = new SuccessResponse<>("Product registered successfully");
+        PartnerResponse partnerResponse = new PartnerResponse();
+        partnerResponse.setPartnerkey(addedPartner.getId());
+        partnerResponse.setEmail(addedPartner.getEmail());
+        partnerResponse.setMobile(addedPartner.getMobile());
+        partnerResponse.setTitle(addedPartner.getTitle());
+        response.data = partnerResponse;
         return response;
     }
 
     @GetMapping("/product/{productId}/partner")
-    public SuccessResponse<Object> getPartners(@PathParam("productId") String productId) {
-        SuccessResponse<Object> response = new SuccessResponse<>("It works awesone");
+    public SuccessResponse<GetProductPartnersResponse> getProductPartners(@PathVariable("productId") String productId){
+        SuccessResponse<GetProductPartnersResponse> response = new SuccessResponse<>("Product Partners");
+        ArrayList<Partner> partners = (ArrayList<Partner>) onboardingService.getPartners(UUID.fromString(productId));
+        GetProductPartnersResponse partnersResponse = new GetProductPartnersResponse();
+        partnersResponse.setPartners(partners);
+        response.data = partnersResponse;
         return response;
     }
 
+
     @GetMapping("/product/{productId}/partner/{partnerId}")
-    public SuccessResponse<Object> getPartnerDetails(@PathParam("productId") String productId, @PathParam("partnerId") String partnerId) {
-        SuccessResponse<Object> response = new SuccessResponse<>("It works awesone");
+    public SuccessResponse<GetPartnerQuizResponse> getPartnerQuiz(@PathVariable("productId") String productId, @PathVariable("partnerId") String partnerId) {
+        SuccessResponse<GetPartnerQuizResponse> response = new SuccessResponse<>("Partner Quizes");
+        ArrayList<Quiz> quizes = (ArrayList<Quiz>) onboardingService.getQuizes(UUID.fromString(partnerId));
+        GetPartnerQuizResponse quizesResponse = new GetPartnerQuizResponse();
+        quizesResponse.setQuizes(quizes);
+        response.data = quizesResponse;
         return response;
     }
 }

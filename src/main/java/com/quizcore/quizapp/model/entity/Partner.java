@@ -10,7 +10,7 @@ import javax.persistence.Id;
 import java.util.UUID;
 
 @Entity
-public class Product {
+public class Partner {
 
     @Id
     @GeneratedValue(generator = "UUID")
@@ -18,6 +18,10 @@ public class Product {
     @Type(type="uuid-char")
     @Column(name = "id", updatable = false, nullable = false)
     UUID id;
+
+    @Column
+    @Type(type="uuid-char")
+    UUID productId;
 
     @Column
     String title;
@@ -31,35 +35,34 @@ public class Product {
     @Column
     String description;
 
-    @Column
-    String type;
+    public Partner() {
+    }
 
+    public Partner(UUID fromString) {
+    }
 
-    public Product(String description, String email, String mobile, String type, String name) {
-        this.description = description;
+    public UUID getProductId() {
+        return productId;
+    }
+
+    public void setProductId(UUID productId) {
+        this.productId = productId;
+    }
+
+    public Partner(UUID productId,String email, String description, String mobile, String name) {
+        this.productId = productId;
+        this.title = name;
         this.email = email;
         this.mobile = mobile;
-        this.type = type;
-        this.title = name;
+        this.description = description;
     }
 
-    public Product(UUID id) {
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
         this.id = id;
-    }
-
-    public Product() {
-
-    }
-
-    @Override
-    public String toString() {
-        return "Product{" +
-                "title='" + title + '\'' +
-                ", email='" + email + '\'' +
-                ", mobile='" + mobile + '\'' +
-                ", description='" + description + '\'' +
-                ", type='" + type + '\'' +
-                '}';
     }
 
     public String getTitle() {
@@ -94,20 +97,15 @@ public class Product {
         this.description = description;
     }
 
-    public String getType() {
-        return type;
-    }
 
-    public void setType(String type) {
-        this.type = type;
+    @Override
+    public String toString() {
+        return "Partner{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", email='" + email + '\'' +
+                ", mobile='" + mobile + '\'' +
+                ", description='" + description + '\'' +
+                '}';
     }
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
 }
