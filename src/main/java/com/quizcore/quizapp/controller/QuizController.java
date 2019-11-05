@@ -52,7 +52,7 @@ public class QuizController {
 	
 	@PostMapping("/upload")
 	public SuccessResponse<UploadQuizResponse> uploadQuiz(@RequestParam("file") MultipartFile quizFile) throws IOException {
-		SuccessResponse<UploadQuizResponse> response = new SuccessResponse<>("It works awesone");
+		SuccessResponse<UploadQuizResponse> response = new SuccessResponse<>("Quiz Uploaded");
 		XSSFWorkbook workbook = new XSSFWorkbook(quizFile.getInputStream());
 		XSSFSheet quizDetails = workbook.getSheetAt(0);
 		XSSFSheet questionDetails = workbook.getSheetAt(1);
