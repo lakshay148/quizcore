@@ -92,7 +92,7 @@ public class QuizService implements IQuizService {
 
 		Result savedResult = resultRepository.save(quizResult);
 
-		UserActivityLog activityLog = new UserActivityLog(userId, "SUBMIT_QUIZ");
+		UserActivityLog activityLog = new UserActivityLog(userId, "QUIZ_SUBMIT");
 		activityLog.setQuizId(quizid);
 
 		UserActivityLog savedActivityLog = userActivityRepository.save(activityLog);
