@@ -51,8 +51,8 @@ public class QuizController {
 	}
 	
 	@PostMapping("/upload")
-	public SuccessResponse<UploadQuizResponse> uploadQuiz(@RequestParam("file") MultipartFile quizFile) throws IOException {
-		SuccessResponse<UploadQuizResponse> response = new SuccessResponse<>("Quiz Uploaded");
+	public SuccessResponse<UploadQuizResponse> uploadQuiz(@RequestParam("file") MultipartFile quizFile, @RequestParam(value = "partnerId", required = true) String partnerId) throws IOException {
+		SuccessResponse<UploadQuizResponse> response = new SuccessResponse<>("Quiz uploaded");
 		XSSFWorkbook workbook = new XSSFWorkbook(quizFile.getInputStream());
 		XSSFSheet quizDetails = workbook.getSheetAt(0);
 		XSSFSheet questionDetails = workbook.getSheetAt(1);
@@ -79,7 +79,7 @@ public class QuizController {
 			System.out.println("key "+row.getCell(0) + " value " + row.getCell(1));
 		}
 
-		Quiz quiz = new Quiz(UUID.fromString("46f7c71a-79c8-4c71-a945-037fe3cee855"), title, description, instructions, level, subject, category, duration, price, type, correctMarks, inCorrectMarks);
+		Quiz quiz = new Quiz(UUID.fromString(partnerId), title, description, instructions, level, subject, category, duration, price, type, correctMarks, inCorrectMarks);
 
 		List<Question> questionList = new ArrayList<Question>();
 		String questions = null;

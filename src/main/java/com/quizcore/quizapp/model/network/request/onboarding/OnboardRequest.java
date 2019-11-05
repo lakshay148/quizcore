@@ -4,6 +4,7 @@ import com.quizcore.quizapp.model.network.request.BaseRequest;
 import com.quizcore.quizapp.model.other.Validity;
 
 public class OnboardRequest extends BaseRequest<OnboardRequest> {
+
     String name;
     String email;
     String mobile;
