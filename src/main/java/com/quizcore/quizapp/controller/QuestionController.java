@@ -57,7 +57,10 @@ public class QuestionController {
 		XSSFWorkbook workbook = new XSSFWorkbook(questionFile.getInputStream());
 		XSSFSheet worksheet = workbook.getSheetAt(0);
 		System.out.println("rows " + worksheet.getPhysicalNumberOfRows());
+
+
 		for(int i=1;i<worksheet.getPhysicalNumberOfRows() ;i++) {
+
 			Question question = new Question();
 			XSSFRow row = worksheet.getRow(i);
 
