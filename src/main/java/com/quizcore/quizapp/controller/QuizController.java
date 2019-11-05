@@ -93,13 +93,29 @@ public class QuizController {
 			question.setStatement(row.getCell(0).getStringCellValue());
 			question.setSubject(subject);
 
+			Options[] options = new Options[4];
+
 			Options savedOption1 =  optionsRespository.save(new Options(row.getCell(1).getStringCellValue()));
+			options[0] = savedOption1;
 			Options savedOption2 =  optionsRespository.save(new Options(row.getCell(2).getStringCellValue()));
+			options[1] = savedOption2;
+
 			Options savedOption3 =  optionsRespository.save(new Options(row.getCell(3).getStringCellValue()));
+			options[2] = savedOption3;
+
 			Options savedOption4 =  optionsRespository.save(new Options(row.getCell(4).getStringCellValue()));
+			options[3] = savedOption4;
 
-
-			question.setAnswer("");
+			String answer = row.getCell(5).toString();;
+			String[] answersArray  = answer.split(",");
+			int p = 0;
+			String answerIds = "";
+            for(p=0;p<answersArray.length;p++){
+                String optionNo = answersArray[p];
+                Options answerOption = options[((int) Double.parseDouble(optionNo)-1)];
+                answerIds = answerIds.length() <= 1 ? answerOption.id+"":answerIds+","+answerOption.id;
+            }
+			question.setAnswer(answerIds);
 			question.setType(type);
 			question.setOptions(savedOption1.id + "," + savedOption2.id + "," + savedOption3.id+"," + savedOption4.id);
 

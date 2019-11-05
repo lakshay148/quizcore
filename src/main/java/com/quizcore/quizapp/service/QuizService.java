@@ -68,7 +68,7 @@ public class QuizService implements IQuizService {
 			if(submittedAnswer != null && submittedAnswer.size()>0){
 				attempted = true;
 				for(String actualAnswer : answerOptions){
-					if(!submittedAnswer.contains(actualAnswer)){
+					if(!submittedAnswer.contains(UUID.fromString(actualAnswer))){
 						inCorrectQuestions.add(question.id);
 						incorrect = true;
 						continue;
@@ -79,7 +79,7 @@ public class QuizService implements IQuizService {
 				}
 			}
 		}
-		int score = quiz.getCorrectMarks() * correctQuestions.size() - quiz.getIncorrectMarks()*inCorrectQuestions.size();
+		int score = quiz.getCorrectMarks() * correctQuestions.size() + quiz.getIncorrectMarks()*inCorrectQuestions.size();
 		int passCriteria = quiz.getPassingCriteria();
 		String[] quizQuestions = quiz.getQuestions().split(",");
 		int totalMarks = quizQuestions.length * quiz.getCorrectMarks();
