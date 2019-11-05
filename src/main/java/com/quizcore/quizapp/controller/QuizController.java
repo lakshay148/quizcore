@@ -8,6 +8,7 @@ import com.quizcore.quizapp.model.entity.*;
 import com.quizcore.quizapp.model.network.request.quiz.AddQuizRequest;
 import com.quizcore.quizapp.model.network.request.quiz.SubmitQuizRequest;
 import com.quizcore.quizapp.model.network.response.quiz.*;
+import com.quizcore.quizapp.model.other.QuestionDetail;
 import com.quizcore.quizapp.model.repository.OptionsRespository;
 import com.quizcore.quizapp.model.repository.QuestionRepository;
 import com.quizcore.quizapp.model.repository.UserActivityRepository;
@@ -130,7 +131,7 @@ public class QuizController {
 	@GetMapping("{quizId}/question")
 	public SuccessResponse<GetQuizQuestionsResponse> getQuizQuestions(@PathVariable("quizId") String quizId){
 		SuccessResponse<GetQuizQuestionsResponse> response = new SuccessResponse<>("Quiz Questions");
-		ArrayList<Question> questions = (ArrayList<Question>) quizService.getQuestions(UUID.fromString(quizId));
+		ArrayList<QuestionDetail> questions = (ArrayList<QuestionDetail>) quizService.getQuestions(UUID.fromString(quizId));
 		GetQuizQuestionsResponse questionsResponse = new GetQuizQuestionsResponse();
 		questionsResponse.setQuestions(questions);
 		response.data = questionsResponse;

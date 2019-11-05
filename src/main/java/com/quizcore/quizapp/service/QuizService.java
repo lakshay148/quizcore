@@ -3,18 +3,13 @@ package com.quizcore.quizapp.service;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import com.quizcore.quizapp.model.entity.Question;
-import com.quizcore.quizapp.model.entity.Result;
-import com.quizcore.quizapp.model.entity.UserActivityLog;
-import com.quizcore.quizapp.model.repository.QuestionRepository;
-import com.quizcore.quizapp.model.repository.QuizRespository;
-import com.quizcore.quizapp.model.repository.ResultRepository;
-import com.quizcore.quizapp.model.repository.UserActivityRepository;
+import com.quizcore.quizapp.model.entity.*;
+import com.quizcore.quizapp.model.other.QuestionDetail;
+import com.quizcore.quizapp.model.repository.*;
 import com.quizcore.quizapp.service.base.IQuizService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import com.quizcore.quizapp.model.entity.Quiz;
 
 @Service
 public class QuizService implements IQuizService {
@@ -27,6 +22,9 @@ public class QuizService implements IQuizService {
 
 	@Autowired
 	ResultRepository resultRepository;
+
+	@Autowired
+	OptionsRespository optionsRespository;
 
 	@Autowired
 	UserActivityRepository userActivityRepository;
@@ -101,7 +99,7 @@ public class QuizService implements IQuizService {
 		return savedResult;
 	}
 
-	public List<Question> getQuestions(UUID quizId){
+	public List<QuestionDetail> getQuestions(UUID quizId){
 		Quiz savedQuiz = getQuiz(quizId);
 		if(savedQuiz != null){
 			String questionIds = savedQuiz.getQuestions();
@@ -109,10 +107,25 @@ public class QuizService implements IQuizService {
 			List<String> questionIdsString = Arrays.asList(questionsArray);
 			ArrayList<UUID> questionUUIDs = (ArrayList<UUID>) questionIdsString.stream().map(id -> UUID.fromString(id)).collect(Collectors.toList());
 			ArrayList<Question> questions = (ArrayList<Question>) questionRepository.findAllById(questionUUIDs);
-			return questions;
+			ArrayList<QuestionDetail> questionDetails = getQuestionDetails(questions);
+			return questionDetails;
 		} else {
 			return null;
 		}
+	}
+
+	private ArrayList<QuestionDetail> getQuestionDetails(ArrayList<Question> questions){
+		ArrayList<QuestionDetail> questionDetails = new ArrayList<>();
+		for(Question question : questions){
+			List<String> optionString = Arrays.asList(question.options.split(","));
+			ArrayList<UUID> optionIds = (ArrayList<UUID>) optionString.stream().map(id->UUID.fromString(id)).collect(Collectors.toList());
+			List<Options> options = (List<Options>) optionsRespository.findAllById(optionIds);
+			QuestionDetail questionDetail = new QuestionDetail();
+			BeanUtils.copyProperties(question,questionDetail);
+			questionDetail.setOptions(options);
+			questionDetails.add(questionDetail);
+		}
+		return questionDetails;
 	}
 
 	public UserActivityLog startQuiz(UUID quizId, UUID userId){
