@@ -1,6 +1,7 @@
 package com.quizcore.quizapp.model.network.request.onboarding;
 
 import com.quizcore.quizapp.model.network.request.BaseRequest;
+import com.quizcore.quizapp.model.network.request.user.RegisterRequest;
 import com.quizcore.quizapp.model.other.Validity;
 
 public class OnboardRequest extends BaseRequest<OnboardRequest> {
@@ -52,21 +53,38 @@ public class OnboardRequest extends BaseRequest<OnboardRequest> {
                 '}';
     }
 
-    @Override
-    public Validity validateRequest(OnboardRequest request) {
-        Validity nonNullValidity = checkNonNull(request);
-        if(!nonNullValidity.isValid())
-            return nonNullValidity;
+
+    public Validity validate(OnboardRequest request) {
+        Validity validity = validatePhone(request.getMobile());
+        if(!validity.isValid()){
+            return validity;
+        }
+        Validity validity1 = checkNonNull(request.getEmail());
+        if(!validity1.isValid()){
+            return validity1;
+        }
         return new Validity(true, "valid");
     }
 
-    public Validity checkNonNull(OnboardRequest request){
-        if(request.email == null){
+    public Validity checkNonNull(String email){
+        if(email == null || email.length() == 0){
             return new Validity(false, "invalid email");
         }
-        if(request.mobile == null){
+        if(mobile == null || mobile.length() == 0){
             return new Validity(false, "invalid mobile");
         }
         return new Validity(true, "valid");
+    }
+
+    public Validity validatePhone(String mobile) {
+        if(mobile == null || mobile.length() < 10 || mobile.length() > 10){
+            return new Validity(false, "Please enter 10 digits");
+        }
+        return new Validity(true, "valid");
+    }
+
+    @Override
+    public Validity validateRequest(OnboardRequest request) {
+        return null;
     }
 }

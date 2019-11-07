@@ -87,7 +87,7 @@ public class QuestionController {
 	
 	@GetMapping("/{questionId}")
 	public SuccessResponse<GetQuestionResponse> getQuestion(@PathVariable("questionId") String questionId){
-		SuccessResponse<GetQuestionResponse> response = new SuccessResponse<>("It works awesone");
+		SuccessResponse<GetQuestionResponse> response = new SuccessResponse<>("It works awesome");
 		return response;
 	}
 	

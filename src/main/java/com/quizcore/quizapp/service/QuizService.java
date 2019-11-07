@@ -38,7 +38,7 @@ public class QuizService implements IQuizService {
 	}
 
 	@Override
-	public Quiz getQuiz(UUID quizId) {
+	public Quiz getQuiz(UUID quizId, UUID userId) {
 		Optional<Quiz> quizOptional = quizRespository.findById(quizId);
 		if(quizOptional.isPresent()){
 			return quizOptional.get();
@@ -56,7 +56,7 @@ public class QuizService implements IQuizService {
 	@Override
 	public Result submitQuiz(UUID quizid, UUID userId, Map<UUID, List<UUID>> answers) {
 		Set<UUID> questionIds = answers.keySet();
-		Quiz quiz = getQuiz(quizid);
+		Quiz quiz = getQuiz(quizid, userId);
 		ArrayList<Question> questions = (ArrayList<Question>) questionRepository.findAllById(questionIds);
 		List<UUID> correctQuestions = new ArrayList<>();
 		List<UUID> inCorrectQuestions = new ArrayList<>();
@@ -101,8 +101,8 @@ public class QuizService implements IQuizService {
 		return savedResult;
 	}
 
-	public List<Question> getQuestions(UUID quizId){
-		Quiz savedQuiz = getQuiz(quizId);
+	public List<Question> getQuestions(UUID quizId, UUID userId){
+		Quiz savedQuiz = getQuiz(quizId, userId);
 		if(savedQuiz != null){
 			String questionIds = savedQuiz.getQuestions();
 			String[] questionsArray = questionIds.split(",");

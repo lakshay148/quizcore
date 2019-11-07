@@ -118,9 +118,9 @@ public class QuizController {
 	}
 	
 	@GetMapping("/{quizId}")
-	public SuccessResponse<GetQuizDetailsResponse> getQuizDetails(@PathVariable("quizId") String quizId){
+	public SuccessResponse<GetQuizDetailsResponse> getQuizDetails(@PathVariable("quizId") String quizId, @RequestHeader("token") String userToken){
 		SuccessResponse<GetQuizDetailsResponse> response = new SuccessResponse<>("Quiz Details");
-		Quiz savedQuiz = quizService.getQuiz(UUID.fromString(quizId));
+		Quiz savedQuiz = quizService.getQuiz(UUID.fromString(quizId), UUID.fromString(userToken));
 		savedQuiz.setQuestions(null);
 		savedQuiz.setPartnerId(null);
 		response.data = new GetQuizDetailsResponse(savedQuiz);
@@ -128,9 +128,9 @@ public class QuizController {
 	}
 
 	@GetMapping("{quizId}/question")
-	public SuccessResponse<GetQuizQuestionsResponse> getQuizQuestions(@PathVariable("quizId") String quizId){
+	public SuccessResponse<GetQuizQuestionsResponse> getQuizQuestions(@PathVariable("quizId") String quizId, @RequestHeader("token") String userToken){
 		SuccessResponse<GetQuizQuestionsResponse> response = new SuccessResponse<>("Quiz Questions");
-		ArrayList<Question> questions = (ArrayList<Question>) quizService.getQuestions(UUID.fromString(quizId));
+		ArrayList<Question> questions = (ArrayList<Question>) quizService.getQuestions(UUID.fromString(quizId), UUID.fromString(userToken));
 		GetQuizQuestionsResponse questionsResponse = new GetQuizQuestionsResponse();
 		questionsResponse.setQuestions(questions);
 		response.data = questionsResponse;
