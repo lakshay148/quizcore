@@ -20,6 +20,7 @@ import com.quizcore.quizapp.model.network.response.user.RegistrationResponse;
 import javax.websocket.server.PathParam;
 
 @RestController
+//@RequestMapping("api/v1/user")
 @RequestMapping("quizcore/api/v1/user")
 public class UserController {
 	

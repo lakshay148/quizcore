@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 @RestController
+//@RequestMapping("api/v1/onboard")
 @RequestMapping("quizcore/api/v1/onboard")
 public class OnboardingController {
 

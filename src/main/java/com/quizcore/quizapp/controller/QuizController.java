@@ -22,6 +22,7 @@ import com.quizcore.quizapp.service.QuizService;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
+//@RequestMapping("api/v1/quiz")
 @RequestMapping("quizcore/api/v1/quiz")
 public class QuizController {
 	
