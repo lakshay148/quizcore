@@ -23,6 +23,8 @@ import javax.websocket.server.PathParam;
 import java.util.ArrayList;
 import java.util.UUID;
 
+//TODO remove unused imports
+
 @RestController
 //@RequestMapping("api/v1/onboard")
 @RequestMapping("quizcore/api/v1/onboard")
@@ -33,7 +35,7 @@ public class OnboardingController {
 
     @GetMapping("/healthcheck")
     public SuccessResponse<Object> checkHealth() {
-        SuccessResponse<Object> response = new SuccessResponse<>("It works awesone");
+        SuccessResponse<Object> response = new SuccessResponse<>("It works awesome");
         return response;
     }
 
@@ -41,9 +43,9 @@ public class OnboardingController {
     public BaseResponse<ProductResponse> addProduct(@RequestBody AddProductRequest request)
     {
             Product product  = new Product(request.getDescription(), request.getEmail(), request.getMobile(), request.getType(), request.getName());
-            Product productkey = onboardingService.getProductByEmailOrPhone(product);
+            Product productKey = onboardingService.getProductByEmailOrPhone(product);
 
-            if (productkey != null)
+            if (productKey != null)
             {
                 ErrorResponse<ProductResponse> response = new ErrorResponse<>("Product already exists", null);
                 return response;
@@ -59,34 +61,6 @@ public class OnboardingController {
             productResponse.setTitle(addedProduct.getTitle());
             response.data = productResponse;
             return response;
-    }
-
-    @GetMapping("/product/{productKey}")
-    public BaseResponse<ProductResponse> getProduct(@PathVariable("productKey") String productKey)
-    {
-        if(productKey == null) {
-            ErrorResponse<ProductResponse> response = new ErrorResponse<>("Please provide Productkey", null);
-            return response;
-        }
-            Product product = new Product(UUID.fromString(productKey));
-            Product addedProduct = onboardingService.getProductByKey(product);
-            if(addedProduct != null)
-            {
-                SuccessResponse<ProductResponse> response = new SuccessResponse<>("Product found !!");
-                ProductResponse productDetails = new ProductResponse();
-                productDetails.setProductkey(addedProduct.getId());
-                productDetails.setEmail(addedProduct.getEmail());
-                productDetails.setMobile(addedProduct.getMobile());
-                productDetails.setTitle(addedProduct.getTitle());
-                productDetails.setType(addedProduct.getType());
-                response.data = productDetails;
-                return response;
-            }
-            else
-            {
-                ErrorResponse<ProductResponse> response = new ErrorResponse<>("No Product found !!", null);
-                return response;
-            }
     }
 
     @PostMapping("/product/{productId}/partner")

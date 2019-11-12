@@ -1,12 +1,16 @@
 package com.quizcore.quizapp.controller;
 
 import com.quizcore.quizapp.model.entity.Partner;
+import com.quizcore.quizapp.model.entity.Product;
 import com.quizcore.quizapp.model.entity.Quiz;
 import com.quizcore.quizapp.model.network.request.onboarding.AddPartnerRequest;
 import com.quizcore.quizapp.model.network.request.onboarding.AddProductRequest;
+import com.quizcore.quizapp.model.network.response.BaseResponse;
+import com.quizcore.quizapp.model.network.response.ErrorResponse;
 import com.quizcore.quizapp.model.network.response.SuccessResponse;
 import com.quizcore.quizapp.model.network.response.partner.GetPartnerQuizResponse;
 import com.quizcore.quizapp.model.network.response.partner.GetProductPartnersResponse;
+import com.quizcore.quizapp.model.network.response.product.ProductResponse;
 import com.quizcore.quizapp.service.OnboardingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -30,9 +34,30 @@ public class ProductController {
     }
 
     @GetMapping("/{productKey}")
-    public SuccessResponse<Object> getProduct(@PathParam("productKey") String productKey) {
-        SuccessResponse<Object> response = new SuccessResponse<>("It works awesone");
-        return response;
+    public BaseResponse<ProductResponse> getProduct(@PathParam("productKey") String productKey) {
+        if(productKey == null) {
+            ErrorResponse<ProductResponse> response = new ErrorResponse<>("Please provide Productkey", null);
+            return response;
+        }
+        Product product = new Product(UUID.fromString(productKey));
+        Product addedProduct = onboardingService.getProductByKey(product);
+        if(addedProduct != null)
+        {
+            SuccessResponse<ProductResponse> response = new SuccessResponse<>("Product found !!");
+            ProductResponse productDetails = new ProductResponse();
+            productDetails.setProductkey(addedProduct.getId());
+            productDetails.setEmail(addedProduct.getEmail());
+            productDetails.setMobile(addedProduct.getMobile());
+            productDetails.setTitle(addedProduct.getTitle());
+            productDetails.setType(addedProduct.getType());
+            response.data = productDetails;
+            return response;
+        }
+        else
+        {
+            ErrorResponse<ProductResponse> response = new ErrorResponse<>("No Product found !!", null);
+            return response;
+        }
     }
 
     @GetMapping("/{productId}/partner")
