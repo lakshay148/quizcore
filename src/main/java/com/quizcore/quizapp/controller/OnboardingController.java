@@ -118,6 +118,7 @@ public class OnboardingController {
         return response;
     }
 
+    //TODO remove this method
     @GetMapping("/product/{productId}/partner")
     public SuccessResponse<GetProductPartnersResponse> getProductPartners(@PathVariable("productId") String productId){
         SuccessResponse<GetProductPartnersResponse> response = new SuccessResponse<>("Product Partners");
@@ -128,7 +129,7 @@ public class OnboardingController {
         return response;
     }
 
-
+    //TODO remove this method
     @GetMapping("/product/{productId}/partner/{partnerId}")
     public SuccessResponse<GetPartnerQuizResponse> getPartnerQuiz(@PathVariable("productId") String productId, @PathVariable("partnerId") String partnerId) {
         SuccessResponse<GetPartnerQuizResponse> response = new SuccessResponse<>("Partner Quizes");
