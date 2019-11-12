@@ -3,18 +3,11 @@ package com.quizcore.quizapp.service;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import com.quizcore.quizapp.model.entity.Question;
-import com.quizcore.quizapp.model.entity.Result;
-import com.quizcore.quizapp.model.entity.UserActivityLog;
-import com.quizcore.quizapp.model.repository.QuestionRepository;
-import com.quizcore.quizapp.model.repository.QuizRespository;
-import com.quizcore.quizapp.model.repository.ResultRepository;
-import com.quizcore.quizapp.model.repository.UserActivityRepository;
+import com.quizcore.quizapp.model.entity.*;
+import com.quizcore.quizapp.model.repository.*;
 import com.quizcore.quizapp.service.base.IQuizService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import com.quizcore.quizapp.model.entity.Quiz;
 
 @Service
 public class QuizService implements IQuizService {
@@ -38,7 +31,7 @@ public class QuizService implements IQuizService {
 	}
 
 	@Override
-	public Quiz getQuiz(UUID quizId, UUID userId) {
+	public Quiz getQuiz(UUID quizId) {
 		Optional<Quiz> quizOptional = quizRespository.findById(quizId);
 		if(quizOptional.isPresent()){
 			return quizOptional.get();
@@ -56,7 +49,7 @@ public class QuizService implements IQuizService {
 	@Override
 	public Result submitQuiz(UUID quizid, UUID userId, Map<UUID, List<UUID>> answers) {
 		Set<UUID> questionIds = answers.keySet();
-		Quiz quiz = getQuiz(quizid, userId);
+		Quiz quiz = getQuiz(quizid);
 		ArrayList<Question> questions = (ArrayList<Question>) questionRepository.findAllById(questionIds);
 		List<UUID> correctQuestions = new ArrayList<>();
 		List<UUID> inCorrectQuestions = new ArrayList<>();
@@ -101,8 +94,8 @@ public class QuizService implements IQuizService {
 		return savedResult;
 	}
 
-	public List<Question> getQuestions(UUID quizId, UUID userId){
-		Quiz savedQuiz = getQuiz(quizId, userId);
+	public List<Question> getQuestions(UUID quizId){
+		Quiz savedQuiz = getQuiz(quizId);
 		if(savedQuiz != null){
 			String questionIds = savedQuiz.getQuestions();
 			String[] questionsArray = questionIds.split(",");
@@ -126,5 +119,6 @@ public class QuizService implements IQuizService {
 		Result savedResult = resultRepository.findByQuizIdAndUserId(quizId, userId);
 		return savedResult;
 	}
+
 
 }

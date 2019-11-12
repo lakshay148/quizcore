@@ -44,7 +44,7 @@ public class OnboardingService implements IOnboardingService {
         return productSaved;
     }
 
-    public Product getProductByKey(Product product, UUID userId) {
+    public Product getProductByKey(Product product) {
         Optional<Product> productSaved = productRepository.findById(product.getId());
         Product productByKey = null;
         if (productSaved.isPresent()) {
@@ -58,12 +58,12 @@ public class OnboardingService implements IOnboardingService {
         return partnerSaved;
     }
 
-    public List<Partner> getPartners(UUID productId, UUID userId) {
+    public List<Partner> getPartners(UUID productId) {
         List<Partner> partners = partnerRepository.findAllByProductId(productId);
         return partners;
     }
 
-    public List<Quiz> getQuizes(UUID partnerId, UUID userId) {
+    public List<Quiz> getQuizes(UUID partnerId) {
         List<Quiz> quizes = quizRepository.findAllByPartnerId(partnerId);
         return quizes;
     }

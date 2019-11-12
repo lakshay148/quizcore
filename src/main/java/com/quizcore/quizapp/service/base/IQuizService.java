@@ -9,7 +9,7 @@ import com.quizcore.quizapp.model.entity.Result;
 
 public interface IQuizService {
 	UUID addQuiz(Quiz quiz);
-	Quiz getQuiz(UUID quizId, UUID userId);
+	Quiz getQuiz(UUID quizId);
 	UUID uploadQuiz(Quiz quiz);
 	Result submitQuiz(UUID quizid, UUID userId, Map<UUID, List<UUID>> answers);
 }

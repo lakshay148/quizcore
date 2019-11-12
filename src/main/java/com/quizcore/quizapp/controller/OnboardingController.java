@@ -76,7 +76,7 @@ public class OnboardingController {
             return response;
         }
             Product product = new Product(UUID.fromString(productKey));
-            Product addedProduct = onboardingService.getProductByKey(product,UUID.fromString(userToken));
+            Product addedProduct = onboardingService.getProductByKey(product);
             if(addedProduct != null)
             {
                 SuccessResponse<ProductResponse> response = new SuccessResponse<>("Product found !!");
@@ -127,7 +127,7 @@ public class OnboardingController {
     @GetMapping("/product/{productId}/partner")
     public SuccessResponse<GetProductPartnersResponse> getProductPartners(@PathVariable("productId") String productId, @RequestHeader("token") String userToken){
         SuccessResponse<GetProductPartnersResponse> response = new SuccessResponse<>("Product Partners");
-        ArrayList<Partner> partners = (ArrayList<Partner>) onboardingService.getPartners(UUID.fromString(productId), UUID.fromString(userToken));
+        ArrayList<Partner> partners = (ArrayList<Partner>) onboardingService.getPartners(UUID.fromString(productId));
         GetProductPartnersResponse partnersResponse = new GetProductPartnersResponse();
         partnersResponse.setPartners(partners);
         response.data = partnersResponse;
@@ -138,7 +138,7 @@ public class OnboardingController {
     @GetMapping("/product/{productId}/partner/{partnerId}")
     public SuccessResponse<GetPartnerQuizResponse> getPartnerQuiz(@PathVariable("productId") String productId, @PathVariable("partnerId") String partnerId,@RequestHeader("token") String userToken) {
         SuccessResponse<GetPartnerQuizResponse> response = new SuccessResponse<>("Partner Quizes");
-        ArrayList<Quiz> quizes = (ArrayList<Quiz>) onboardingService.getQuizes(UUID.fromString(partnerId), UUID.fromString(userToken));
+        ArrayList<Quiz> quizes = (ArrayList<Quiz>) onboardingService.getQuizes(UUID.fromString(partnerId));
         GetPartnerQuizResponse quizesResponse = new GetPartnerQuizResponse();
         quizesResponse.setQuizes(quizes);
         response.data = quizesResponse;

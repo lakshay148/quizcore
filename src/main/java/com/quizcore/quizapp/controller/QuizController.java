@@ -120,7 +120,7 @@ public class QuizController {
 	@GetMapping("/{quizId}")
 	public SuccessResponse<GetQuizDetailsResponse> getQuizDetails(@PathVariable("quizId") String quizId, @RequestHeader("token") String userToken){
 		SuccessResponse<GetQuizDetailsResponse> response = new SuccessResponse<>("Quiz Details");
-		Quiz savedQuiz = quizService.getQuiz(UUID.fromString(quizId), UUID.fromString(userToken));
+		Quiz savedQuiz = quizService.getQuiz(UUID.fromString(quizId));
 		savedQuiz.setQuestions(null);
 		savedQuiz.setPartnerId(null);
 		response.data = new GetQuizDetailsResponse(savedQuiz);
@@ -130,7 +130,7 @@ public class QuizController {
 	@GetMapping("{quizId}/question")
 	public SuccessResponse<GetQuizQuestionsResponse> getQuizQuestions(@PathVariable("quizId") String quizId, @RequestHeader("token") String userToken){
 		SuccessResponse<GetQuizQuestionsResponse> response = new SuccessResponse<>("Quiz Questions");
-		ArrayList<Question> questions = (ArrayList<Question>) quizService.getQuestions(UUID.fromString(quizId), UUID.fromString(userToken));
+		ArrayList<Question> questions = (ArrayList<Question>) quizService.getQuestions(UUID.fromString(quizId));
 		GetQuizQuestionsResponse questionsResponse = new GetQuizQuestionsResponse();
 		questionsResponse.setQuestions(questions);
 		response.data = questionsResponse;
@@ -140,7 +140,7 @@ public class QuizController {
 	@PostMapping("{quizId}/start")
 	public SuccessResponse<StartQuizResponse> startQuiz(@PathVariable("quizId") String quizId, @RequestHeader("token") String userToken){
 		SuccessResponse<StartQuizResponse> response = new SuccessResponse<>("Quiz Started");
-		UserActivityLog startQuizLog = quizService.startQuiz(UUID.fromString(quizId), UUID.fromString(userToken));
+		UserActivityLog startQuizLog = quizService.startQuiz(UUID.fromString(quizId),UUID.fromString(userToken));
 		StartQuizResponse startQuizResponse = new StartQuizResponse();
 		startQuizResponse.setQuizStartTime(startQuizLog.getCreatedTime());
 		response.data = startQuizResponse;
@@ -167,7 +167,7 @@ public class QuizController {
 	@GetMapping("{quizId}/result")
 	public SuccessResponse<QuizResultResponse> getQuizResult(@PathVariable("quizId") String quizId, @RequestHeader("token") String userToken){
 		SuccessResponse<QuizResultResponse> response = new SuccessResponse<>("Result Found");
-		Result quizResult = quizService.getQuizResult(UUID.fromString(quizId), UUID.fromString(userToken));
+		Result quizResult = quizService.getQuizResult(UUID.fromString(quizId),UUID.fromString(userToken));
 		QuizResultResponse resultResponse = new QuizResultResponse();
 		resultResponse.setResult(quizResult);
 		response.data = resultResponse;
