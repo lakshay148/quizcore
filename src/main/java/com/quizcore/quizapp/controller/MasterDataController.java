@@ -13,7 +13,7 @@ public class MasterDataController {
 
     @GetMapping("/healthcheck")
     public BaseResponse<Object> checkHealth() {
-        SuccessResponse<Object> response = new SuccessResponse<>("It works awesone");
+        SuccessResponse<Object> response = new SuccessResponse<>("It works awesome");
         return response;
     }
 

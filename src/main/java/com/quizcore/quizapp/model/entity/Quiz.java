@@ -1,14 +1,13 @@
 package com.quizcore.quizapp.model.entity;
 
-import java.util.UUID;
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Type;
+import java.util.UUID;
 
 @Entity
 public class Quiz {
@@ -74,8 +73,7 @@ public class Quiz {
 	public Quiz() {
 	}
 
-	public Quiz(UUID partnerId, String title, String description, String instructions, int level, String subject, String category, int duration, double payment, String type, int correctMarks, int incorrectMarks) {
-		this.partnerId = partnerId;
+	public Quiz(String title, String description, String instructions, int level, String subject, String category, int duration, double payment, String type, int correctMarks, int incorrectMarks) {
 		this.title = title;
 		this.description = description;
 		this.instructions = instructions;

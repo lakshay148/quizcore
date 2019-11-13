@@ -1,23 +1,20 @@
 package com.quizcore.quizapp.controller;
 
-import java.util.UUID;
-
+import com.quizcore.quizapp.model.entity.User;
 import com.quizcore.quizapp.model.network.request.user.LoginRequest;
+import com.quizcore.quizapp.model.network.request.user.RegisterRequest;
+import com.quizcore.quizapp.model.network.response.BaseResponse;
 import com.quizcore.quizapp.model.network.response.ErrorResponse;
 import com.quizcore.quizapp.model.network.response.SuccessResponse;
+import com.quizcore.quizapp.model.network.response.user.LoginResponse;
+import com.quizcore.quizapp.model.network.response.user.RegistrationResponse;
 import com.quizcore.quizapp.model.network.response.user.UserActivityResponse;
 import com.quizcore.quizapp.model.network.response.user.UserDetailsResponse;
 import com.quizcore.quizapp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import com.quizcore.quizapp.model.entity.User;
-import com.quizcore.quizapp.model.network.request.user.RegisterRequest;
-import com.quizcore.quizapp.model.network.response.BaseResponse;
-import com.quizcore.quizapp.model.network.response.user.LoginResponse;
-import com.quizcore.quizapp.model.network.response.user.RegistrationResponse;
-
-import javax.websocket.server.PathParam;
+import java.util.UUID;
 
 @RestController
 //@RequestMapping("api/v1/user")
