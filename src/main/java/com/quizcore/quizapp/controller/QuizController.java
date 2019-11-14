@@ -8,6 +8,7 @@ import com.quizcore.quizapp.model.entity.*;
 import com.quizcore.quizapp.model.network.request.quiz.AddQuizRequest;
 import com.quizcore.quizapp.model.network.request.quiz.SubmitQuizRequest;
 import com.quizcore.quizapp.model.network.response.quiz.*;
+import com.quizcore.quizapp.model.other.QuestionDetail;
 import com.quizcore.quizapp.model.repository.OptionsRespository;
 import com.quizcore.quizapp.model.repository.QuestionRepository;
 import com.quizcore.quizapp.model.repository.UserActivityRepository;
@@ -92,13 +93,29 @@ public class QuizController {
 			question.setStatement(row.getCell(0).getStringCellValue());
 			question.setSubject(subject);
 
+			Options[] options = new Options[4];
+
 			Options savedOption1 =  optionsRespository.save(new Options(row.getCell(1).getStringCellValue()));
+			options[0] = savedOption1;
 			Options savedOption2 =  optionsRespository.save(new Options(row.getCell(2).getStringCellValue()));
+			options[1] = savedOption2;
+
 			Options savedOption3 =  optionsRespository.save(new Options(row.getCell(3).getStringCellValue()));
+			options[2] = savedOption3;
+
 			Options savedOption4 =  optionsRespository.save(new Options(row.getCell(4).getStringCellValue()));
+			options[3] = savedOption4;
 
-
-			question.setAnswer("");
+			String answer = row.getCell(5).toString();;
+			String[] answersArray  = answer.split(",");
+			int p = 0;
+			String answerIds = "";
+            for(p=0;p<answersArray.length;p++){
+                String optionNo = answersArray[p];
+                Options answerOption = options[((int) Double.parseDouble(optionNo)-1)];
+                answerIds = answerIds.length() <= 1 ? answerOption.id+"":answerIds+","+answerOption.id;
+            }
+			question.setAnswer(answerIds);
 			question.setType(type);
 			question.setOptions(savedOption1.id + "," + savedOption2.id + "," + savedOption3.id+"," + savedOption4.id);
 
@@ -130,7 +147,7 @@ public class QuizController {
 	@GetMapping("{quizId}/question")
 	public SuccessResponse<GetQuizQuestionsResponse> getQuizQuestions(@PathVariable("quizId") String quizId, @RequestHeader("token") String userToken){
 		SuccessResponse<GetQuizQuestionsResponse> response = new SuccessResponse<>("Quiz Questions");
-		ArrayList<Question> questions = (ArrayList<Question>) quizService.getQuestions(UUID.fromString(quizId));
+		ArrayList<QuestionDetail> questions = (ArrayList<QuestionDetail>) quizService.getQuestions(UUID.fromString(quizId));
 		GetQuizQuestionsResponse questionsResponse = new GetQuizQuestionsResponse();
 		questionsResponse.setQuestions(questions);
 		response.data = questionsResponse;
@@ -140,9 +157,11 @@ public class QuizController {
 	@PostMapping("{quizId}/start")
 	public SuccessResponse<StartQuizResponse> startQuiz(@PathVariable("quizId") String quizId, @RequestHeader("token") String userToken){
 		SuccessResponse<StartQuizResponse> response = new SuccessResponse<>("Quiz Started");
-		UserActivityLog startQuizLog = quizService.startQuiz(UUID.fromString(quizId),UUID.fromString(userToken));
+		Quiz quiz = quizService.getQuiz(UUID.fromString(quizId));
+		UserActivityLog startQuizLog = quizService.startQuiz(UUID.fromString(quizId), UUID.fromString(userToken));
 		StartQuizResponse startQuizResponse = new StartQuizResponse();
 		startQuizResponse.setQuizStartTime(startQuizLog.getCreatedTime());
+		startQuizResponse.setDuration(quiz.getDuration());
 		response.data = startQuizResponse;
 		return response;
 	}
