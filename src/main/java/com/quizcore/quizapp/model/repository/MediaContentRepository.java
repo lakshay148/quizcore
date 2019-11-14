@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 import java.util.UUID;
 
 @Repository
-public interface DatabaseRepository extends CrudRepository<MediaContent, UUID> {
+public interface MediaContentRepository extends CrudRepository<MediaContent, UUID> {
 }
