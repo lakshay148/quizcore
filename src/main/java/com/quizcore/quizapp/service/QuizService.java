@@ -4,6 +4,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import com.quizcore.quizapp.model.entity.*;
+import com.quizcore.quizapp.model.repository.*;
+import com.quizcore.quizapp.model.entity.*;
 import com.quizcore.quizapp.model.other.QuestionDetail;
 import com.quizcore.quizapp.model.repository.*;
 import com.quizcore.quizapp.service.base.IQuizService;
@@ -139,5 +141,6 @@ public class QuizService implements IQuizService {
 		Result savedResult = resultRepository.findByQuizIdAndUserId(quizId, userId);
 		return savedResult;
 	}
+
 
 }

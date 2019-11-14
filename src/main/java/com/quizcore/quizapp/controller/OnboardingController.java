@@ -14,6 +14,7 @@ import com.quizcore.quizapp.model.network.response.partner.GetProductPartnersRes
 import com.quizcore.quizapp.model.network.response.partner.PartnerResponse;
 import com.quizcore.quizapp.model.network.response.product.ProductResponse;
 import com.quizcore.quizapp.model.network.response.quiz.GetQuizQuestionsResponse;
+import com.quizcore.quizapp.model.network.response.user.RegistrationResponse;
 import com.quizcore.quizapp.model.other.Validity;
 import com.quizcore.quizapp.service.OnboardingService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,13 +33,20 @@ public class OnboardingController {
 
     @GetMapping("/healthcheck")
     public SuccessResponse<Object> checkHealth() {
-        SuccessResponse<Object> response = new SuccessResponse<>("It works awesone");
+        SuccessResponse<Object> response = new SuccessResponse<>("It works awesome");
         return response;
     }
 
     @PostMapping("/product")
     public BaseResponse<ProductResponse> addProduct(@RequestBody AddProductRequest request)
     {
+
+        Validity requestValidity = request.validate(request);
+        if (!requestValidity.isValid()) {
+            ErrorResponse<ProductResponse> response = new ErrorResponse<>(requestValidity.getMessage(), null);
+            return response;
+        }
+
             Product product  = new Product(request.getDescription(), request.getEmail(), request.getMobile(), request.getType(), request.getName());
             Product productkey = onboardingService.getProductByEmailOrPhone(product);
 
@@ -61,7 +69,7 @@ public class OnboardingController {
     }
 
     @GetMapping("/product/{productKey}")
-    public BaseResponse<ProductResponse> getProduct(@PathVariable("productKey") String productKey)
+    public BaseResponse<ProductResponse> getProduct(@PathVariable("productKey") String productKey, @RequestHeader("token") String userToken)
     {
         if(productKey == null) {
             ErrorResponse<ProductResponse> response = new ErrorResponse<>("Please provide Productkey", null);
@@ -89,10 +97,9 @@ public class OnboardingController {
     }
 
     @PostMapping("/product/{productId}/partner")
-    public BaseResponse<PartnerResponse> addPartner(@PathVariable("productId") String productId,@RequestBody AddPartnerRequest request)
-    {
-        Validity requestValidity = request.validateRequest(request);
-        if(!requestValidity.isValid()){
+    public BaseResponse<PartnerResponse> addPartner(@PathVariable("productId") String productId,@RequestBody AddPartnerRequest request) {
+        Validity requestValidity = request.validate(request);
+        if (!requestValidity.isValid()) {
             ErrorResponse<PartnerResponse> response = new ErrorResponse<>(requestValidity.getMessage(), null);
             return response;
         }
@@ -118,7 +125,7 @@ public class OnboardingController {
     }
 
     @GetMapping("/product/{productId}/partner")
-    public SuccessResponse<GetProductPartnersResponse> getProductPartners(@PathVariable("productId") String productId){
+    public SuccessResponse<GetProductPartnersResponse> getProductPartners(@PathVariable("productId") String productId, @RequestHeader("token") String userToken){
         SuccessResponse<GetProductPartnersResponse> response = new SuccessResponse<>("Product Partners");
         ArrayList<Partner> partners = (ArrayList<Partner>) onboardingService.getPartners(UUID.fromString(productId));
         GetProductPartnersResponse partnersResponse = new GetProductPartnersResponse();
@@ -129,7 +136,7 @@ public class OnboardingController {
 
 
     @GetMapping("/product/{productId}/partner/{partnerId}")
-    public SuccessResponse<GetPartnerQuizResponse> getPartnerQuiz(@PathVariable("productId") String productId, @PathVariable("partnerId") String partnerId) {
+    public SuccessResponse<GetPartnerQuizResponse> getPartnerQuiz(@PathVariable("productId") String productId, @PathVariable("partnerId") String partnerId,@RequestHeader("token") String userToken) {
         SuccessResponse<GetPartnerQuizResponse> response = new SuccessResponse<>("Partner Quizes");
         ArrayList<Quiz> quizes = (ArrayList<Quiz>) onboardingService.getQuizes(UUID.fromString(partnerId));
         GetPartnerQuizResponse quizesResponse = new GetPartnerQuizResponse();

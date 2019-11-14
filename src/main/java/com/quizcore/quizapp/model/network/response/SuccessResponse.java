@@ -1,12 +1,12 @@
 package com.quizcore.quizapp.model.network.response;
 
+import com.quizcore.quizapp.model.entity.MediaContent;
 import com.quizcore.quizapp.model.entity.Product;
 
 public class SuccessResponse<T> extends BaseResponse<T> {
 
     public int status = 0;
     public String message;
-    public T data;
 
     public SuccessResponse(String message) {
         this.message = message;
