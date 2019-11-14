@@ -77,6 +77,15 @@ public class QuizService implements IQuizService {
 		return quiz;
 	}
 
+	private Options[] saveOptions(String[] optionStrings){
+		Options[] options = new Options[optionStrings.length];
+		for(int i=0;i<optionStrings.length;i++){
+			Options savedOption = optionsRespository.save(new Options(optionStrings[i]));
+			options[i] = savedOption;
+		}
+		return options;
+	}
+
 	private Quiz parseQuizQuestions(Quiz quiz , XSSFSheet sheet){
 		XSSFSheet questionDetails = sheet;
 		System.out.println("rows " + questionDetails.getPhysicalNumberOfRows());
@@ -92,20 +101,16 @@ public class QuizService implements IQuizService {
 			question.setStatement(row.getCell(0).getStringCellValue());
 			question.setSubject(quiz.getSubject());
 
-			Options[] options = new Options[4];
 
-			Options savedOption1 =  optionsRespository.save(new Options(row.getCell(1).getStringCellValue()));
-			options[0] = savedOption1;
-			Options savedOption2 =  optionsRespository.save(new Options(row.getCell(2).getStringCellValue()));
-			options[1] = savedOption2;
+			String[] optionStrings = new String[4];
+			optionStrings[0] = row.getCell(1).getStringCellValue();
+			optionStrings[1] = row.getCell(2).getStringCellValue();
+			optionStrings[2] = row.getCell(3).getStringCellValue();
+			optionStrings[3] = row.getCell(4).getStringCellValue();
 
-			Options savedOption3 =  optionsRespository.save(new Options(row.getCell(3).getStringCellValue()));
-			options[2] = savedOption3;
+			Options[] options = saveOptions(optionStrings);
 
-			Options savedOption4 =  optionsRespository.save(new Options(row.getCell(4).getStringCellValue()));
-			options[3] = savedOption4;
-
-			String answer = row.getCell(5).toString();;
+			String answer = row.getCell(5).toString();
 			String[] answersArray  = answer.split(",");
 			int p = 0;
 			String answerIds = "";
@@ -116,7 +121,7 @@ public class QuizService implements IQuizService {
 			}
 			question.setAnswer(answerIds);
 			question.setType(quiz.getType());
-			question.setOptions(savedOption1.id + "," + savedOption2.id + "," + savedOption3.id+"," + savedOption4.id);
+			question.setOptions(options[0].id + "," + options[1].id + "," + options[2].id+"," + options[3].id);
 
 			Question savedQuestion = questionRepository.save(question);
 			questionList.add(savedQuestion);
