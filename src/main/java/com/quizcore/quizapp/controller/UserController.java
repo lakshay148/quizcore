@@ -8,13 +8,21 @@ import com.quizcore.quizapp.model.network.response.ErrorResponse;
 import com.quizcore.quizapp.model.network.response.SuccessResponse;
 import com.quizcore.quizapp.model.network.response.user.LoginResponse;
 import com.quizcore.quizapp.model.network.response.user.RegistrationResponse;
+import com.quizcore.quizapp.model.network.response.product.ProductResponse;
 import com.quizcore.quizapp.model.network.response.user.UserActivityResponse;
 import com.quizcore.quizapp.model.network.response.user.UserDetailsResponse;
+import com.quizcore.quizapp.model.other.Validity;
 import com.quizcore.quizapp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
+
+import com.quizcore.quizapp.model.entity.User;
+import com.quizcore.quizapp.model.network.request.user.RegisterRequest;
+import com.quizcore.quizapp.model.network.response.BaseResponse;
+import com.quizcore.quizapp.model.network.response.user.LoginResponse;
+import com.quizcore.quizapp.model.network.response.user.RegistrationResponse;
 
 @RestController
 //@RequestMapping("api/v1/user")
@@ -34,6 +42,12 @@ public class UserController {
 	@PostMapping("/register")
 	public BaseResponse<RegistrationResponse> registerUser(@RequestBody RegisterRequest registermodel)
 	{
+		Validity requestValidity = registermodel.validate(registermodel);
+		if(!requestValidity.isValid()){
+			ErrorResponse<RegistrationResponse> response = new ErrorResponse<>(requestValidity.getMessage(), null);
+			return response;
+	    }
+
 		User user = new User(registermodel.getName(), registermodel.getEmail(), registermodel.getPassword(), registermodel.getPhone());
 		User userId = userService.getUserByEmailOrPhone(user);
 
