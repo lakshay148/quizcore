@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import java.util.UUID;
 
 @Service
-public class VideoStorageService {
+public class MediaStorageService {
 
     @Autowired
     MediaContentRepository mediaContentRepository;

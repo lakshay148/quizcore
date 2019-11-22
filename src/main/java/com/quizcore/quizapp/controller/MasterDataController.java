@@ -20,8 +20,7 @@ import java.util.UUID;
 
 
 @RestController
-//@RequestMapping("api/v1/masterdata")
-@RequestMapping("quizcore/api/v1/masterdata")
+@RequestMapping("${base.endpoint}/api/v1/masterdata")
 public class MasterDataController {
 
 
@@ -56,53 +55,53 @@ public class MasterDataController {
         return response;
     }
 
-            @GetMapping("/subject/{productId}")
-            public BaseResponse<SubjectsResponse> getSubject(@PathVariable("productId") String productId, @RequestHeader("token") String userToken)
-            {
-                if (productId == null)
-                {
-                    ErrorResponse<SubjectsResponse> response = new ErrorResponse<>("Please provide productId", null);
-                    return response;
-                }
-                ArrayList<Subject> subjects = (ArrayList<Subject>) masterDataService.getSubjectByProductId(UUID.fromString(productId));
-                if(subjects != null)
-                {
-                    SuccessResponse<SubjectsResponse> response = new SuccessResponse<>("Subjects found !!");
-                    SubjectsResponse subjectDetails = new SubjectsResponse();
-                    subjectDetails.setSubjects(subjects);
-                    response.data = subjectDetails;
-                    return response;
-                }
-                else
-                    {
-                        ErrorResponse<SubjectsResponse> response = new ErrorResponse<>("No Subject Found", null);
-                        return response;
-                    }
+    @GetMapping("/subject/{productId}")
+    public BaseResponse<SubjectsResponse> getSubject(@PathVariable("productId") String productId, @RequestHeader("token") String userToken)
+    {
+        if (productId == null)
+        {
+            ErrorResponse<SubjectsResponse> response = new ErrorResponse<>("Please provide productId", null);
+            return response;
+        }
+        ArrayList<Subject> subjects = (ArrayList<Subject>) masterDataService.getSubjectByProductId(UUID.fromString(productId));
+        if(subjects != null)
+        {
+            SuccessResponse<SubjectsResponse> response = new SuccessResponse<>("Subjects found !!");
+            SubjectsResponse subjectDetails = new SubjectsResponse();
+            subjectDetails.setSubjects(subjects);
+            response.data = subjectDetails;
+            return response;
+        }
+        else
+        {
+            ErrorResponse<SubjectsResponse> response = new ErrorResponse<>("No Subject Found", null);
+            return response;
+        }
 
-            }
+    }
 
 
-            @PostMapping("/addCategory")
-            public BaseResponse<CategoryResponse> addCategory(@RequestBody AddCategoryRequest request)
-            {
-                Category category = new Category(UUID.fromString(request.getProductId()), request.getCategoryName());
-                Category categoryId = masterDataService.getCategoryIdByCategoryName(category);
+    @PostMapping("/addCategory")
+    public BaseResponse<CategoryResponse> addCategory(@RequestBody AddCategoryRequest request)
+    {
+        Category category = new Category(UUID.fromString(request.getProductId()), request.getCategoryName());
+        Category categoryId = masterDataService.getCategoryIdByCategoryName(category);
 
-                if (categoryId != null)
-                {
-                    ErrorResponse<CategoryResponse> response = new ErrorResponse<>("Category already exists", null) ;
-                    return response;
-                }
+        if (categoryId != null)
+        {
+            ErrorResponse<CategoryResponse> response = new ErrorResponse<>("Category already exists", null) ;
+            return response;
+        }
 
-                Category addedCategory = masterDataService.addCategory(category);
-                SuccessResponse<CategoryResponse> response = new SuccessResponse<>("Category added successfully");
-                CategoryResponse categoryresponse = new CategoryResponse();
-                categoryresponse.setCategoryId(addedCategory.getId());
-                categoryresponse.setCategoryname(addedCategory.getCategoryName());
-                categoryresponse.setProductkey(addedCategory.getProductId());
-                response.data = categoryresponse;
-                return response;
-            }
+        Category addedCategory = masterDataService.addCategory(category);
+        SuccessResponse<CategoryResponse> response = new SuccessResponse<>("Category added successfully");
+        CategoryResponse categoryresponse = new CategoryResponse();
+        categoryresponse.setCategoryId(addedCategory.getId());
+        categoryresponse.setCategoryname(addedCategory.getCategoryName());
+        categoryresponse.setProductkey(addedCategory.getProductId());
+        response.data = categoryresponse;
+        return response;
+    }
 
 
     @GetMapping("/category/{productId}")

@@ -1,43 +1,34 @@
 package com.quizcore.quizapp.controller;
 
-import com.quizcore.quizapp.model.entity.MediaContent;
 import com.quizcore.quizapp.model.entity.Partner;
 import com.quizcore.quizapp.model.entity.Product;
 import com.quizcore.quizapp.model.entity.Quiz;
-import com.quizcore.quizapp.model.network.request.onboarding.AddPartnerRequest;
-import com.quizcore.quizapp.model.network.request.onboarding.AddProductRequest;
 import com.quizcore.quizapp.model.network.response.BaseResponse;
 import com.quizcore.quizapp.model.network.response.ErrorResponse;
 import com.quizcore.quizapp.model.network.response.SuccessResponse;
 import com.quizcore.quizapp.model.network.response.partner.GetPartnerQuizResponse;
 import com.quizcore.quizapp.model.network.response.partner.GetProductPartnersResponse;
 import com.quizcore.quizapp.model.network.response.product.ProductResponse;
+import com.quizcore.quizapp.service.MediaStorageService;
 import com.quizcore.quizapp.service.OnboardingService;
 import org.springframework.beans.factory.annotation.Autowired;
-import com.quizcore.quizapp.model.network.response.product.UploadMediaResponse;
-import com.quizcore.quizapp.service.VideoStorageService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.websocket.server.PathParam;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.UUID;
 import java.util.ArrayList;
 import java.util.UUID;
 
 @RestController
-//@RequestMapping("api/v1/product")
-@RequestMapping("qizcore/api/v1/product")
+@RequestMapping("${base.endpoint}/api/v1/product")
 public class ProductController {
 
     @Autowired
     OnboardingService onboardingService;
 
     @Autowired
-    VideoStorageService videoStorageService;
+    MediaStorageService mediaStorageService;
 
     @GetMapping("/healthcheck")
     public SuccessResponse<Object> checkHealth() {
@@ -89,40 +80,6 @@ public class ProductController {
         GetPartnerQuizResponse quizesResponse = new GetPartnerQuizResponse();
         quizesResponse.setQuizes(quizes);
         response.data = quizesResponse;
-        return response;
-    }
-
-
-    @PostMapping("/uploadVideo")
-    public BaseResponse<UploadMediaResponse> uploadVideo(@RequestParam("file") MultipartFile file, @RequestParam("partnerId") String partnerId, @RequestParam("quizId") String quizId,@RequestHeader("token") String userToken) throws IOException {
-
-        File saveFile = new File("C:/Users/MeghaMiglani/Videos/" + file.getOriginalFilename());
-
-        if (saveFile == null)
-        {
-            ErrorResponse<UploadMediaResponse> response = new ErrorResponse<>("Please upload video", null);
-            return response;
-        }
-        try {
-            FileOutputStream fout = new FileOutputStream(saveFile);
-            fout.write(file.getBytes());
-        } catch (Exception e) {
-            System.out.println(e.getLocalizedMessage());
-        }
-
-        MediaContent mediaContent = new MediaContent();
-        SuccessResponse<UploadMediaResponse> response = new SuccessResponse<>("Video uploaded");
-        mediaContent.setQuizId(quizId);
-        mediaContent.setPartnerId(partnerId);
-        mediaContent.setUserId(UUID.fromString(userToken));
-        mediaContent.setPath(saveFile.getPath());
-
-        UUID videosaved = videoStorageService.videoUpload(mediaContent);
-
-        UploadMediaResponse mediaResponse = new UploadMediaResponse();
-        mediaResponse.setId(videosaved.toString());
-        mediaResponse.setPath(saveFile.getPath());
-        response.data = mediaResponse;
         return response;
     }
 }

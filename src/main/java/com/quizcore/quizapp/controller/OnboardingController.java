@@ -2,7 +2,6 @@ package com.quizcore.quizapp.controller;
 
 import com.quizcore.quizapp.model.entity.Partner;
 import com.quizcore.quizapp.model.entity.Product;
-import com.quizcore.quizapp.model.entity.Question;
 import com.quizcore.quizapp.model.entity.Quiz;
 import com.quizcore.quizapp.model.network.request.onboarding.AddPartnerRequest;
 import com.quizcore.quizapp.model.network.request.onboarding.AddProductRequest;
@@ -13,22 +12,18 @@ import com.quizcore.quizapp.model.network.response.partner.GetPartnerQuizRespons
 import com.quizcore.quizapp.model.network.response.partner.GetProductPartnersResponse;
 import com.quizcore.quizapp.model.network.response.partner.PartnerResponse;
 import com.quizcore.quizapp.model.network.response.product.ProductResponse;
-import com.quizcore.quizapp.model.network.response.quiz.GetQuizQuestionsResponse;
-import com.quizcore.quizapp.model.network.response.user.RegistrationResponse;
 import com.quizcore.quizapp.model.other.Validity;
 import com.quizcore.quizapp.service.OnboardingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.websocket.server.PathParam;
 import java.util.ArrayList;
 import java.util.UUID;
 
 //TODO remove unused imports
 
 @RestController
-//@RequestMapping("api/v1/onboard")
-@RequestMapping("quizcore/api/v1/onboard")
+@RequestMapping("${base.endpoint}/api/v1/onboard")
 public class OnboardingController {
 
     @Autowired

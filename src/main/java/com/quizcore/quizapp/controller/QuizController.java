@@ -19,8 +19,7 @@ import java.io.IOException;
 import java.util.*;
 
 @RestController
-//@RequestMapping("api/v1/quiz")
-@RequestMapping("quizcore/api/v1/quiz")
+@RequestMapping("${base.endpoint}/api/v1/quiz")
 public class QuizController {
 	
 	@Autowired

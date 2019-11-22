@@ -8,7 +8,6 @@ import com.quizcore.quizapp.model.network.response.ErrorResponse;
 import com.quizcore.quizapp.model.network.response.SuccessResponse;
 import com.quizcore.quizapp.model.network.response.user.LoginResponse;
 import com.quizcore.quizapp.model.network.response.user.RegistrationResponse;
-import com.quizcore.quizapp.model.network.response.product.ProductResponse;
 import com.quizcore.quizapp.model.network.response.user.UserActivityResponse;
 import com.quizcore.quizapp.model.network.response.user.UserDetailsResponse;
 import com.quizcore.quizapp.model.other.Validity;
@@ -18,15 +17,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
-import com.quizcore.quizapp.model.entity.User;
-import com.quizcore.quizapp.model.network.request.user.RegisterRequest;
-import com.quizcore.quizapp.model.network.response.BaseResponse;
-import com.quizcore.quizapp.model.network.response.user.LoginResponse;
-import com.quizcore.quizapp.model.network.response.user.RegistrationResponse;
-
 @RestController
-//@RequestMapping("api/v1/user")
-@RequestMapping("quizcore/api/v1/user")
+@RequestMapping("${base.endpoint}/api/v1/user")
 public class UserController {
 	
 	@Autowired

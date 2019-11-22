@@ -1,30 +1,28 @@
 package com.quizcore.quizapp.controller;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-
 import com.quizcore.quizapp.model.entity.Options;
-import com.quizcore.quizapp.model.repository.OptionsRespository;
-import org.apache.poi.xssf.usermodel.XSSFRow;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
 import com.quizcore.quizapp.model.entity.Question;
 import com.quizcore.quizapp.model.network.request.question.AddQuestionRequest;
 import com.quizcore.quizapp.model.network.response.SuccessResponse;
 import com.quizcore.quizapp.model.network.response.question.AddQuestionResponse;
 import com.quizcore.quizapp.model.network.response.question.GetQuestionResponse;
 import com.quizcore.quizapp.model.network.response.question.UploadQuestionResponse;
+import com.quizcore.quizapp.model.repository.OptionsRespository;
 import com.quizcore.quizapp.service.QuestionService;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
 @RestController
-//@RequestMapping("api/v1/question")
-@RequestMapping("quizcore/api/v1/question")
+@RequestMapping("${base.endpoint}/api/v1/question")
 public class QuestionController {
 	
 	@Autowired

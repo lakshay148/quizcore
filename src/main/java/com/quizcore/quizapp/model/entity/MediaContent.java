@@ -26,14 +26,6 @@ public class MediaContent {
     UUID userId;
 
     @Column
-    @Type(type="uuid-char")
-    String quizId;
-
-    @Column
-    @Type(type="uuid-char")
-    String partnerId;
-
-    @Column
     String mediaType;
 
     @Column
@@ -58,22 +50,6 @@ public class MediaContent {
         this.userId = userId;
     }
 
-    public String getQuizId() {
-        return quizId;
-    }
-
-    public void setQuizId(String quizId) {
-        this.quizId = quizId;
-    }
-
-    public String getPartnerId() {
-        return partnerId;
-    }
-
-    public void setPartnerId(String partnerId) {
-        this.partnerId = partnerId;
-    }
-
     public String getMediaType() {
         return mediaType;
     }
@@ -93,8 +69,6 @@ public class MediaContent {
     public MediaContent(UUID id, UUID userId, String quizId, String partnerId, String mediaType, String path) {
         this.id = id;
         this.userId = userId;
-        this.quizId = quizId;
-        this.partnerId = partnerId;
         this.mediaType = mediaType;
         this.path = path;
     }
@@ -104,8 +78,6 @@ public class MediaContent {
         return "MediaContent{" +
                 "id=" + id +
                 ", userId=" + userId +
-                ", quizId='" + quizId + '\'' +
-                ", partnerId='" + partnerId + '\'' +
                 ", mediaType='" + mediaType + '\'' +
                 ", path='" + path + '\'' +
                 '}';
