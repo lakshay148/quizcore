@@ -39,7 +39,7 @@ public class PaymentController {
             return response;
         }
 
-        PaymentOrder paymentOrder = new PaymentOrder(request.getCustomerId(), request.getProductId(), request.getPartnerId(), request.getAmount());
+        PaymentOrder paymentOrder = new PaymentOrder(UUID.fromString(headers.get("authorization")), request.getProductId(), request.getPartnerId(), request.getAmount());
         UUID createdOrderId = orderService.createOrder(paymentOrder);
         String url = paymentUrl+createdOrderId;
         SuccessResponse<OrderResponse> response = new SuccessResponse<>("order created successfully");

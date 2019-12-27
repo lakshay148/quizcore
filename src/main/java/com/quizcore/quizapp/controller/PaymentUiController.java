@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("${base.endpoint}/payment")
 public class PaymentUiController {
 
-    @GetMapping("/pay")
+    @GetMapping("/")
     public String home(){
         return "checkout";
     }
