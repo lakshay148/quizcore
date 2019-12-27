@@ -1,8 +1,9 @@
 package com.quizcore.quizapp.model.network.request.onboarding;
 
 import com.quizcore.quizapp.model.network.request.BaseRequest;
-import com.quizcore.quizapp.model.network.request.user.RegisterRequest;
 import com.quizcore.quizapp.model.other.Validity;
+
+import java.util.Map;
 
 public class OnboardRequest extends BaseRequest<OnboardRequest> {
 
@@ -85,6 +86,11 @@ public class OnboardRequest extends BaseRequest<OnboardRequest> {
 
     @Override
     public Validity validateRequest(OnboardRequest request) {
+        return null;
+    }
+
+    @Override
+    public Validity validateHeaders(Map<String, String> headers) {
         return null;
     }
 }

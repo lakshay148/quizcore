@@ -38,32 +38,31 @@ public class OnboardingController {
     @PostMapping("/product")
     public BaseResponse<ProductResponse> addProduct(@RequestBody AddProductRequest request)
     {
-
         Validity requestValidity = request.validate(request);
         if (!requestValidity.isValid()) {
             ErrorResponse<ProductResponse> response = new ErrorResponse<>(requestValidity.getMessage(), null);
             return response;
         }
 
-            Product product  = new Product(request.getDescription(), request.getEmail(), request.getMobile(), request.getType(), request.getName());
-            Product productKey = onboardingService.getProductByEmailOrPhone(product);
+        Product product  = new Product(request.getDescription(), request.getEmail(), request.getMobile(), request.getType(), request.getName());
+        Product productKey = onboardingService.getProductByEmailOrPhone(product);
 
-            if (productKey != null)
-            {
-                ErrorResponse<ProductResponse> response = new ErrorResponse<>("Product already exists", null);
-                return response;
-            }
-
-            Product addedProduct = onboardingService.onboardProduct(product);
-            SuccessResponse<ProductResponse> response = new SuccessResponse<>("Product registered successfully");
-            ProductResponse productResponse = new ProductResponse();
-            productResponse.setProductkey(addedProduct.getId());
-            productResponse.setEmail(addedProduct.getEmail());
-            productResponse.setMobile(addedProduct.getMobile());
-            productResponse.setType(addedProduct.getType());
-            productResponse.setTitle(addedProduct.getTitle());
-            response.data = productResponse;
+        if (productKey != null)
+        {
+            ErrorResponse<ProductResponse> response = new ErrorResponse<>("Product already exists", null);
             return response;
+        }
+
+        Product addedProduct = onboardingService.onboardProduct(product);
+        SuccessResponse<ProductResponse> response = new SuccessResponse<>("Product registered successfully");
+        ProductResponse productResponse = new ProductResponse();
+        productResponse.setProductkey(addedProduct.getId());
+        productResponse.setEmail(addedProduct.getEmail());
+        productResponse.setMobile(addedProduct.getMobile());
+        productResponse.setType(addedProduct.getType());
+        productResponse.setTitle(addedProduct.getTitle());
+        response.data = productResponse;
+        return response;
     }
 
     @GetMapping("/product/{productKey}")

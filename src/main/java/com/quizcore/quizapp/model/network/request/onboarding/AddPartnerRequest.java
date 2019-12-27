@@ -11,7 +11,4 @@ public class AddPartnerRequest extends OnboardRequest {
                 ", description='" + description + '\'' +
                 '}';
     }
-
-
-
 }

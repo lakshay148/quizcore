@@ -1,6 +1,7 @@
 package com.quizcore.quizapp.model.network.request.question;
 
 public class AddQuestionRequest {
+
 	String statement;
 	String type;
 	int level;
