@@ -29,7 +29,7 @@ public class MediaController {
     @PostMapping("/uploadVideo")
     public BaseResponse<UploadMediaResponse> uploadVideo(@RequestParam("file") MultipartFile file, @RequestHeader("token") String userToken) throws IOException {
 
-        File saveFile = new File(videoResourcePath + file.getOriginalFilename());
+        File saveFile = new File(videoResourcePath + file.getOriginalFilename().replace(" ","_"));
 
         if (saveFile == null)
         {

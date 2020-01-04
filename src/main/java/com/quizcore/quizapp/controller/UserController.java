@@ -1,15 +1,14 @@
 package com.quizcore.quizapp.controller;
 
 import com.quizcore.quizapp.model.entity.User;
+import com.quizcore.quizapp.model.entity.UserQuizMedia;
 import com.quizcore.quizapp.model.network.request.user.LoginRequest;
 import com.quizcore.quizapp.model.network.request.user.RegisterRequest;
+import com.quizcore.quizapp.model.network.request.user.SubmitVideoRequest;
 import com.quizcore.quizapp.model.network.response.BaseResponse;
 import com.quizcore.quizapp.model.network.response.ErrorResponse;
 import com.quizcore.quizapp.model.network.response.SuccessResponse;
-import com.quizcore.quizapp.model.network.response.user.LoginResponse;
-import com.quizcore.quizapp.model.network.response.user.RegistrationResponse;
-import com.quizcore.quizapp.model.network.response.user.UserActivityResponse;
-import com.quizcore.quizapp.model.network.response.user.UserDetailsResponse;
+import com.quizcore.quizapp.model.network.response.user.*;
 import com.quizcore.quizapp.model.other.Validity;
 import com.quizcore.quizapp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -138,6 +137,30 @@ public class UserController {
 		}
 	}
 
+	@PostMapping("/{userId}/video")
+	public BaseResponse<SubmitVideoResponse> userVideo(@PathVariable("userId") String userId, @RequestBody SubmitVideoRequest submitVideoRequest){
+		if(submitVideoRequest.getQuizId() == null || submitVideoRequest.getVideoId() == null) {
+			ErrorResponse<SubmitVideoResponse> response = new ErrorResponse<>("Request incomplete", null);
+			return response;
+		}
+		User user = new User(UUID.fromString(userId));
+		User savedUser = userService.getUserById(user);
+		if(savedUser != null)
+		{
+			SuccessResponse<SubmitVideoResponse> response = new SuccessResponse<>("Video saved !!");
+			UserQuizMedia userProductMedia = new UserQuizMedia(savedUser.id, UUID.fromString(submitVideoRequest.getQuizId()),UUID.fromString(submitVideoRequest.getVideoId()),"video");
+			UUID mediaId = userService.saveUserMedia(userProductMedia);
+			SubmitVideoResponse submitVideoResponse = new SubmitVideoResponse();
+			submitVideoResponse.setStoredMediaId(mediaId.toString());
+			response.data = submitVideoResponse;
+			return response;
+		}
+		else
+		{
+			ErrorResponse<SubmitVideoResponse> response = new ErrorResponse<>("No User found !!", null);
+			return response;
+		}
+	}
 
 }
 

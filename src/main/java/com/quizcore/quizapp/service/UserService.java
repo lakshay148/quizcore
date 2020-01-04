@@ -1,15 +1,16 @@
 
 package com.quizcore.quizapp.service;
 
-import java.util.Optional;
-import java.util.UUID;
-
+import com.quizcore.quizapp.model.entity.User;
+import com.quizcore.quizapp.model.entity.UserQuizMedia;
+import com.quizcore.quizapp.model.repository.UserQuizMediaRepository;
+import com.quizcore.quizapp.model.repository.UserRepository;
 import com.quizcore.quizapp.service.base.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.quizcore.quizapp.model.entity.User;
-import com.quizcore.quizapp.model.repository.UserRepository;
+import java.util.Optional;
+import java.util.UUID;
 
 
 @Service
@@ -17,6 +18,9 @@ public class UserService implements IUserService {
 	
 	@Autowired
 	UserRepository userRepository;
+
+	@Autowired
+	UserQuizMediaRepository userProductMediaRepository;
 
 	@Override
 	public User getUserById(User user) {
@@ -41,6 +45,11 @@ public class UserService implements IUserService {
 	public User getUserByEmailOrPhone(User user) {
 		User savedUser = userRepository.findByEmailOrPhone(user.getEmail(), user.getPhone());
 		return savedUser;
+	}
+
+	public UUID saveUserMedia(UserQuizMedia userProductMedia){
+		UserQuizMedia userProductMediaSaved = userProductMediaRepository.save(userProductMedia);
+		return userProductMediaSaved.id;
 	}
 
 }

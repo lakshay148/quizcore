@@ -18,6 +18,7 @@ import java.util.UUID;
 @RequestMapping("${base.endpoint}/payment")
 public class PaymentUiController {
 
+
     @Autowired
     PaytmDetails paytmDetails;
 
@@ -97,5 +98,10 @@ public class PaymentUiController {
 
     private String getCheckSum(TreeMap<String, String> parameters) throws Exception {
         return CheckSumServiceHelper.getCheckSumServiceHelper().genrateCheckSum(paytmDetails.getMerchantKey(), parameters);
+    }
+
+
+    public void createOrder(){
+
     }
 }
