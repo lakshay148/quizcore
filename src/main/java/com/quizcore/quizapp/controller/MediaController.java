@@ -26,10 +26,14 @@ public class MediaController {
     @Value("${videoResourcesPath}")
     String videoResourcePath;
 
+    @Value("${resourceReturnPath}")
+    String returnPath;
+
     @PostMapping("/uploadVideo")
     public BaseResponse<UploadMediaResponse> uploadVideo(@RequestParam("file") MultipartFile file, @RequestHeader("token") String userToken) throws IOException {
 
-        File saveFile = new File(videoResourcePath + file.getOriginalFilename().replace(" ","_"));
+        String fileName = file.getOriginalFilename().replace(" ","_");
+        File saveFile = new File(videoResourcePath + fileName);
 
         if (saveFile == null)
         {
@@ -53,7 +57,7 @@ public class MediaController {
 
         UploadMediaResponse mediaResponse = new UploadMediaResponse();
         mediaResponse.setId(videosaved.toString());
-        mediaResponse.setPath(saveFile.getPath());
+        mediaResponse.setPath(returnPath+fileName);
         response.data = mediaResponse;
         return response;
     }
