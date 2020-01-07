@@ -10,7 +10,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
@@ -74,10 +74,10 @@ public class Quiz {
 	int paymentRequired;
 
 	@CreationTimestamp
-	Date createdAt;
+	LocalDateTime createdAt;
 
 	@UpdateTimestamp
-	Date updatedAt;
+	LocalDateTime updatedAt;
 
 
 

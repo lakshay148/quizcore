@@ -9,7 +9,9 @@ import com.quizcore.quizapp.model.network.request.quiz.SubmitQuizRequest;
 import com.quizcore.quizapp.model.network.response.BaseResponse;
 import com.quizcore.quizapp.model.network.response.SuccessResponse;
 import com.quizcore.quizapp.model.network.response.quiz.*;
+import com.quizcore.quizapp.model.network.response.user.UserQuizResponse;
 import com.quizcore.quizapp.model.other.QuestionDetail;
+import com.quizcore.quizapp.model.other.UserQuizResult;
 import com.quizcore.quizapp.service.QuizService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -102,6 +104,16 @@ public class QuizController {
 		Result quizResult = quizService.getQuizResult(UUID.fromString(quizId),UUID.fromString(userToken));
 		QuizResultResponse resultResponse = new QuizResultResponse();
 		resultResponse.setResult(quizResult);
+		response.data = resultResponse;
+		return response;
+	}
+
+	@GetMapping("user/{userId}")
+	public BaseResponse<UserQuizResponse> getUserQuizzes(@PathVariable("userId") String userId, @RequestHeader("token") String userToken){
+		SuccessResponse<UserQuizResponse> response = new SuccessResponse<>("Result Found");
+		List<UserQuizResult> quizResult = quizService.getUserSubmittedQuizzes(UUID.fromString(userId));
+		UserQuizResponse resultResponse = new UserQuizResponse();
+		resultResponse.setSubmissions(quizResult);
 		response.data = resultResponse;
 		return response;
 	}

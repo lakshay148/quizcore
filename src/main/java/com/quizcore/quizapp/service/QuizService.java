@@ -2,6 +2,7 @@ package com.quizcore.quizapp.service;
 
 import com.quizcore.quizapp.model.entity.*;
 import com.quizcore.quizapp.model.other.QuestionDetail;
+import com.quizcore.quizapp.model.other.UserQuizResult;
 import com.quizcore.quizapp.model.repository.*;
 import com.quizcore.quizapp.service.base.IQuizService;
 import org.apache.poi.xssf.usermodel.XSSFRow;
@@ -74,6 +75,7 @@ public class QuizService implements IQuizService {
 		double price = quizDetails.getRow(i+11).getCell(1).getNumericCellValue();
 
 		Quiz quiz = new Quiz(title, description, instructions, level, subject, category, duration, price, type, correctMarks, inCorrectMarks);
+		quiz.setPassingCriteria((int)quizDetails.getRow(i+12).getCell(1).getNumericCellValue());
 		quiz.setVideoRequired((int)quizDetails.getRow(i+13).getCell(1).getNumericCellValue());
 		quiz.setPaymentRequired((int)quizDetails.getRow(i+14).getCell(1).getNumericCellValue());
 		return quiz;
@@ -240,5 +242,8 @@ public class QuizService implements IQuizService {
 		return savedResult;
 	}
 
-
+	//get the results of quizzes submitted by the user
+	public List<UserQuizResult> getUserSubmittedQuizzes(UUID userId){
+		return resultRepository.getUserQuizResults(userId);
+	}
 }

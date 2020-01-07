@@ -1,16 +1,20 @@
 package com.quizcore.quizapp.model.entity;
 
-import java.util.UUID;
-
+import lombok.Data;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
+@Data
 public class Question {
 	
 	public Question(){
@@ -48,6 +52,12 @@ public class Question {
 
 	@Column
 	public String answer;
+
+	@CreationTimestamp
+	LocalDateTime createdAt;
+
+	@UpdateTimestamp
+	LocalDateTime updatedAt;
 
 	public String getOptions() {
 		return options;
