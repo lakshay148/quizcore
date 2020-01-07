@@ -20,8 +20,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.UUID;
 
-//TODO remove unused imports
-
 @RestController
 @RequestMapping("${base.endpoint}/api/v1/onboard")
 public class OnboardingController {

@@ -1,15 +1,20 @@
 package com.quizcore.quizapp.model.entity;
 
+import lombok.Data;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import java.util.Date;
 import java.util.UUID;
 
 @Entity
+@Data
 public class Quiz {
 	
 	@Id
@@ -61,6 +66,20 @@ public class Quiz {
 
 	@Column
 	int passingCriteria;
+
+	@Column(columnDefinition = "TINYINT(1) DEFAULT 0")
+	int videoRequired;
+
+	@Column(columnDefinition = "TINYINT(1) DEFAULT 0")
+	int paymentRequired;
+
+	@CreationTimestamp
+	Date createdAt;
+
+	@UpdateTimestamp
+	Date updatedAt;
+
+
 
 	public int getPassingCriteria() {
 		return passingCriteria;

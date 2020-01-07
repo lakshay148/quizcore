@@ -74,6 +74,8 @@ public class QuizService implements IQuizService {
 		double price = quizDetails.getRow(i+11).getCell(1).getNumericCellValue();
 
 		Quiz quiz = new Quiz(title, description, instructions, level, subject, category, duration, price, type, correctMarks, inCorrectMarks);
+		quiz.setVideoRequired((int)quizDetails.getRow(i+13).getCell(1).getNumericCellValue());
+		quiz.setPaymentRequired((int)quizDetails.getRow(i+14).getCell(1).getNumericCellValue());
 		return quiz;
 	}
 
