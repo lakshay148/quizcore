@@ -1,5 +1,6 @@
 package com.quizcore.quizapp.controller;
 
+import com.paytm.pg.merchant.CheckSumServiceHelper;
 import com.quizcore.quizapp.model.other.PaytmDetails;
 import com.quizcore.quizapp.service.PaymentOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -91,14 +92,12 @@ public class PaymentUiController {
     }
 
     private boolean validateCheckSum(TreeMap<String, String> parameters, String paytmChecksum) throws Exception {
-//        return CheckSumServiceHelper.getCheckSumServiceHelper().verifycheckSum(paytmDetails.getMerchantKey(),
-//                parameters, paytmChecksum);
-        return false;
+        return CheckSumServiceHelper.getCheckSumServiceHelper().verifycheckSum(paytmDetails.getMerchantKey(),
+                parameters, paytmChecksum);
     }
 
     private String getCheckSum(TreeMap<String, String> parameters) throws Exception {
-//        return CheckSumServiceHelper.getCheckSumServiceHelper().genrateCheckSum(paytmDetails.getMerchantKey(), parameters);
-        return null;
+        return CheckSumServiceHelper.getCheckSumServiceHelper().genrateCheckSum(paytmDetails.getMerchantKey(), parameters);
     }
 
 

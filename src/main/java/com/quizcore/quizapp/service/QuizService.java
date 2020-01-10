@@ -5,6 +5,7 @@ import com.quizcore.quizapp.model.other.QuestionDetail;
 import com.quizcore.quizapp.model.other.UserQuizResult;
 import com.quizcore.quizapp.model.repository.*;
 import com.quizcore.quizapp.service.base.IQuizService;
+import com.quizcore.quizapp.util.UserAction;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -192,7 +193,7 @@ public class QuizService implements IQuizService {
 
 		Result savedResult = resultRepository.save(quizResult);
 
-		UserActivityLog activityLog = new UserActivityLog(userId, "QUIZ_SUBMIT");
+		UserActivityLog activityLog = new UserActivityLog(userId, UserAction.SUBMIT_QUIZ.name());
 		activityLog.setQuizId(quizid);
 
 		UserActivityLog savedActivityLog = userActivityRepository.save(activityLog);
@@ -231,7 +232,7 @@ public class QuizService implements IQuizService {
 	}
 
 	public UserActivityLog startQuiz(UUID quizId, UUID userId){
-		UserActivityLog activityLog = new UserActivityLog(userId, "QUIZ_START");
+		UserActivityLog activityLog = new UserActivityLog(userId, UserAction.START_QUIZ.name());
 		activityLog.setQuizId(quizId);
 		UserActivityLog savedLog = userActivityRepository.save(activityLog);
 		return savedLog;

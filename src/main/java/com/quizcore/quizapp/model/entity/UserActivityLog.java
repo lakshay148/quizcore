@@ -9,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.UUID;
 
 @Entity
@@ -32,8 +33,29 @@ public class UserActivityLog {
     @Column
     public String action;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        UserActivityLog that = (UserActivityLog) o;
+        return Objects.equals(userId, that.userId) &&
+                Objects.equals(quizId, that.quizId) &&
+                Objects.equals(action, that.action);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(userId, quizId, action);
+    }
+
     public UserActivityLog(UUID userId, String action) {
         this.userId = userId;
+        this.action = action;
+    }
+
+    public UserActivityLog(UUID userId, UUID quizId, String action) {
+        this.userId = userId;
+        this.quizId = quizId;
         this.action = action;
     }
 

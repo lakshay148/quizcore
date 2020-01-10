@@ -1,20 +1,16 @@
 package com.quizcore.quizapp.model.network.response.quiz;
 
 import com.quizcore.quizapp.model.entity.Quiz;
+import com.quizcore.quizapp.model.other.UserQuizActions;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class GetQuizDetailsResponse {
 
     Quiz quizDetails;
-
-    public GetQuizDetailsResponse(Quiz quizDetails) {
-        this.quizDetails = quizDetails;
-    }
-
-    public Quiz getQuizDetails() {
-        return quizDetails;
-    }
-
-    public void setQuizDetails(Quiz quizDetails) {
-        this.quizDetails = quizDetails;
-    }
+    UserQuizActions userQuizActions;
 }
