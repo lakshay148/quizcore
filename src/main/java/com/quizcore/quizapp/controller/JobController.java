@@ -44,4 +44,12 @@ public class JobController {
         return response;
     }
 
+    @GetMapping
+    public SuccessResponse<JobsResponse> getJobs() {
+        SuccessResponse<JobsResponse> response = new SuccessResponse<>("Jobs list");
+        List<Job> partnerJobs = jobService.getActiveJobs();
+        response.data = new JobsResponse(partnerJobs);
+        return response;
+    }
+
 }

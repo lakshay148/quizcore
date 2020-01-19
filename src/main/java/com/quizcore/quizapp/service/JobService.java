@@ -29,4 +29,8 @@ public class JobService {
     public List<Job> getPartnerJobs(UUID partnerId){
         return partnerJobRespository.findPartnerJobs(partnerId);
     }
+
+    public List<Job> getActiveJobs(){
+        return (List<Job>) jobRepository.findAll();
+    }
 }
