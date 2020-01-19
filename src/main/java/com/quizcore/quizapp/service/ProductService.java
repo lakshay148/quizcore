@@ -27,6 +27,9 @@ public class ProductService {
     @Autowired
     JobRepository jobRepository;
 
+    @Autowired
+    PartnerRepository partnerRepository;
+
     public ProductMetrics getMetrics(UUID productId){
         ProductMetrics productMetrics = new ProductMetrics();
         productMetrics.setJobs(((List<Job>)jobRepository.findAll()).size());
@@ -34,6 +37,7 @@ public class ProductService {
         productMetrics.setPayments(((List<PaymentOrder>)paymentOrderRepository.findAll()).size());
         productMetrics.setQuizresponses(((List<Result>)resultRepository.findAll()).size());
         productMetrics.setQuizzes(((List<Quiz>)quizRepository.findAll()).size());
+        productMetrics.setPartners(((List<Partner>)partnerRepository.findAllByProductId(productId)).size());
         return productMetrics;
     }
 }

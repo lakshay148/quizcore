@@ -9,4 +9,5 @@ public class ProductMetrics {
     int payments;
     int quizresponses;
     int jobs;
+    int partners;
 }
