@@ -1,17 +1,13 @@
 package com.quizcore.quizapp.model.entity;
 
-import java.util.UUID;
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
-
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Type;
+import java.util.UUID;
 
 @Entity
 public class User {
@@ -25,6 +21,14 @@ public class User {
 		this.email = email;
 		this.password=password;
 		this.phone=phone;
+	}
+
+	public User(String name, String email, String password, String phone, UUID productId) {
+		this.name = name;
+		this.email = email;
+		this.password = password;
+		this.phone = phone;
+		this.productId = productId;
 	}
 
 	public User(UUID id) {
@@ -96,5 +100,8 @@ public class User {
 
 	@Column(name = "phone")
 	public String phone;
+
+	@Type(type="uuid-char")
+	public UUID productId;
 }
 

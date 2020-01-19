@@ -44,7 +44,7 @@ public class UserController {
 			return response;
 	    }
 
-		User user = new User(registermodel.getName(), registermodel.getEmail(), registermodel.getPassword(), registermodel.getPhone());
+		User user = new User(registermodel.getName(), registermodel.getEmail(), registermodel.getPassword(), registermodel.getPhone(), UUID.fromString(registermodel.getSecret()));
 		User userId = userService.getUserByEmailOrPhone(user);
 
 		if(userId!=null)

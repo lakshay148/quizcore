@@ -3,6 +3,7 @@ package com.quizcore.quizapp.controller;
 import com.quizcore.quizapp.model.entity.Partner;
 import com.quizcore.quizapp.model.entity.Product;
 import com.quizcore.quizapp.model.entity.Quiz;
+import com.quizcore.quizapp.model.network.request.product.ProductMetrics;
 import com.quizcore.quizapp.model.network.response.BaseResponse;
 import com.quizcore.quizapp.model.network.response.ErrorResponse;
 import com.quizcore.quizapp.model.network.response.SuccessResponse;
@@ -11,8 +12,10 @@ import com.quizcore.quizapp.model.network.response.partner.GetProductPartnersRes
 import com.quizcore.quizapp.model.network.response.product.ProductResponse;
 import com.quizcore.quizapp.service.MediaStorageService;
 import com.quizcore.quizapp.service.OnboardingService;
+import com.quizcore.quizapp.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -29,6 +32,9 @@ public class ProductController {
 
     @Autowired
     MediaStorageService mediaStorageService;
+
+    @Autowired
+    ProductService productService;
 
     @GetMapping("/healthcheck")
     public SuccessResponse<Object> checkHealth() {
@@ -80,6 +86,14 @@ public class ProductController {
         GetPartnerQuizResponse quizesResponse = new GetPartnerQuizResponse();
         quizesResponse.setQuizes(quizes);
         response.data = quizesResponse;
+        return response;
+    }
+
+    @GetMapping("/metrics/{productId}")
+    public BaseResponse<ProductMetrics> getProductMetrics(@PathVariable("productId") String productId){
+        ProductMetrics productMetrics = productService.getMetrics(UUID.fromString(productId));
+        SuccessResponse<ProductMetrics> response = new SuccessResponse<ProductMetrics>("Product Metrics");
+        response.data = productMetrics;
         return response;
     }
 }
