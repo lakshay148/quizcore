@@ -6,7 +6,9 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.List;
 import java.util.UUID;
 
-public interface QuizRespository extends CrudRepository<Quiz, UUID> {
+public interface QuizRepository extends CrudRepository<Quiz, UUID> {
 
     List<Quiz> findAllByPartnerId(UUID partnerId);
+
+
 }

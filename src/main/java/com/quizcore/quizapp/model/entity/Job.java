@@ -26,6 +26,16 @@ public class Job {
         this.salary = salary;
     }
 
+    public Job(UUID id, String title, String description, String city, String startTime, String endTime, double salary) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.city = city;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.salary = salary;
+    }
+
     @Id
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
@@ -34,22 +44,22 @@ public class Job {
     public UUID id;
 
     @Column
-    String title;
+    public String title;
 
     @Column
-    String description;
+    public String description;
 
     @Column
-    String city;
+    public String city;
 
     @Column
-    String startTime;
+    public String startTime;
 
     @Column
-    String endTime;
+    public String endTime;
 
     @Column
-    double salary;
+    public double salary;
 
     @CreationTimestamp
     LocalDateTime createdAt;

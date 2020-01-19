@@ -3,16 +3,16 @@ package com.quizcore.quizapp.service;
 import com.quizcore.quizapp.model.entity.Partner;
 import com.quizcore.quizapp.model.entity.Product;
 import com.quizcore.quizapp.model.entity.Quiz;
-import com.quizcore.quizapp.model.other.ProductPartner;
 import com.quizcore.quizapp.model.repository.PartnerRepository;
 import com.quizcore.quizapp.model.repository.ProductRepository;
-import com.quizcore.quizapp.model.repository.QuizRespository;
+import com.quizcore.quizapp.model.repository.QuizRepository;
 import com.quizcore.quizapp.service.base.IOnboardingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class OnboardingService implements IOnboardingService {
@@ -24,7 +24,7 @@ public class OnboardingService implements IOnboardingService {
     PartnerRepository partnerRepository;
 
     @Autowired
-    QuizRespository quizRepository;
+    QuizRepository quizRepository;
 
     @Override
     public Partner onboardPartner(Partner partner) {

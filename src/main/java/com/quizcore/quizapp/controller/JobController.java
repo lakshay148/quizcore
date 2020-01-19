@@ -2,13 +2,15 @@ package com.quizcore.quizapp.controller;
 
 import com.quizcore.quizapp.model.entity.Job;
 import com.quizcore.quizapp.model.network.request.job.AddJobRequest;
-import com.quizcore.quizapp.model.network.response.job.AddJobResponse;
 import com.quizcore.quizapp.model.network.response.BaseResponse;
 import com.quizcore.quizapp.model.network.response.SuccessResponse;
+import com.quizcore.quizapp.model.network.response.job.AddJobResponse;
+import com.quizcore.quizapp.model.network.response.job.JobsResponse;
 import com.quizcore.quizapp.service.JobService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -31,6 +33,14 @@ public class JobController {
         AddJobResponse jobResponse = new AddJobResponse();
         jobResponse.setId(jobId.toString());
         response.data = jobResponse;
+        return response;
+    }
+
+    @GetMapping("/partner/{partnerId}")
+    public SuccessResponse<JobsResponse> getPartnerJobs(@PathVariable("partnerId") String partnerId) {
+        SuccessResponse<JobsResponse> response = new SuccessResponse<>("Partner Jobs");
+        List<Job> partnerJobs = jobService.getPartnerJobs(UUID.fromString(partnerId));
+        response.data = new JobsResponse(partnerJobs);
         return response;
     }
 

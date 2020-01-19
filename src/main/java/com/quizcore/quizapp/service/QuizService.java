@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 public class QuizService implements IQuizService {
 
 	@Autowired
-	QuizRespository quizRespository;
+	QuizRepository quizRespository;
 
 	@Autowired
 	QuestionRepository questionRepository;
