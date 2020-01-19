@@ -9,5 +9,5 @@ public class QuizappApplication extends SpringBootServletInitializer {
 
 	public static void main(String[] args) {
 		SpringApplication.run(QuizappApplication.class, args);
-	}	
+	}
 }

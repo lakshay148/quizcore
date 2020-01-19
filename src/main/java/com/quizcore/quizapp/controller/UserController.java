@@ -10,7 +10,9 @@ import com.quizcore.quizapp.model.network.response.ErrorResponse;
 import com.quizcore.quizapp.model.network.response.SuccessResponse;
 import com.quizcore.quizapp.model.network.response.user.*;
 import com.quizcore.quizapp.model.other.Validity;
+import com.quizcore.quizapp.service.UserActivityService;
 import com.quizcore.quizapp.service.UserService;
+import com.quizcore.quizapp.util.UserAction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,6 +24,9 @@ public class UserController {
 	
 	@Autowired
 	UserService userService;
+
+	@Autowired
+	UserActivityService userActivityService;
 	
 	
 	@GetMapping("/healthcheck")
@@ -150,6 +155,7 @@ public class UserController {
 			SuccessResponse<SubmitVideoResponse> response = new SuccessResponse<>("Video saved !!");
 			UserQuizMedia userProductMedia = new UserQuizMedia(savedUser.id, UUID.fromString(submitVideoRequest.getQuizId()),UUID.fromString(submitVideoRequest.getVideoId()),"video");
 			UUID mediaId = userService.saveUserMedia(userProductMedia);
+			userActivityService.saveUserQuizAction(UUID.fromString(userId),UUID.fromString(submitVideoRequest.getQuizId()), UserAction.UPLOAD_VIDEO);
 			SubmitVideoResponse submitVideoResponse = new SubmitVideoResponse();
 			submitVideoResponse.setStoredMediaId(mediaId.toString());
 			response.data = submitVideoResponse;
