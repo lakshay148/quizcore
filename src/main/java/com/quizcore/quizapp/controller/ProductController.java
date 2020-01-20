@@ -14,15 +14,13 @@ import com.quizcore.quizapp.service.MediaStorageService;
 import com.quizcore.quizapp.service.OnboardingService;
 import com.quizcore.quizapp.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.websocket.server.PathParam;
 import java.util.ArrayList;
 import java.util.UUID;
 
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("${base.endpoint}/api/v1/product")
 public class ProductController {
@@ -89,7 +87,7 @@ public class ProductController {
         return response;
     }
 
-    @GetMapping("/metrics/{productId}")
+    @GetMapping("/{productId}/metrics")
     public BaseResponse<ProductMetrics> getProductMetrics(@PathVariable("productId") String productId){
         ProductMetrics productMetrics = productService.getMetrics(UUID.fromString(productId));
         SuccessResponse<ProductMetrics> response = new SuccessResponse<ProductMetrics>("Product Metrics");
