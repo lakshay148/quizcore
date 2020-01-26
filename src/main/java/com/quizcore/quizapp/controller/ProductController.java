@@ -3,21 +3,25 @@ package com.quizcore.quizapp.controller;
 import com.quizcore.quizapp.model.entity.Partner;
 import com.quizcore.quizapp.model.entity.Product;
 import com.quizcore.quizapp.model.entity.Quiz;
+import com.quizcore.quizapp.model.entity.Result;
 import com.quizcore.quizapp.model.network.request.product.ProductMetrics;
 import com.quizcore.quizapp.model.network.response.BaseResponse;
 import com.quizcore.quizapp.model.network.response.ErrorResponse;
 import com.quizcore.quizapp.model.network.response.SuccessResponse;
 import com.quizcore.quizapp.model.network.response.partner.GetPartnerQuizResponse;
 import com.quizcore.quizapp.model.network.response.partner.GetProductPartnersResponse;
+import com.quizcore.quizapp.model.network.response.product.GetSubmissionsResponse;
 import com.quizcore.quizapp.model.network.response.product.ProductResponse;
 import com.quizcore.quizapp.service.MediaStorageService;
 import com.quizcore.quizapp.service.OnboardingService;
 import com.quizcore.quizapp.service.ProductService;
+import com.quizcore.quizapp.service.ResultService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.websocket.server.PathParam;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @CrossOrigin(origins = "*")
@@ -33,6 +37,9 @@ public class ProductController {
 
     @Autowired
     ProductService productService;
+
+    @Autowired
+    ResultService resultService;
 
     @GetMapping("/healthcheck")
     public SuccessResponse<Object> checkHealth() {
@@ -94,4 +101,15 @@ public class ProductController {
         response.data = productMetrics;
         return response;
     }
+
+    @GetMapping("/{productId}/quiz/result")
+    public BaseResponse<GetSubmissionsResponse> getQuizSubmissions(@PathVariable("productId") String productId){
+        SuccessResponse<GetSubmissionsResponse> response = new SuccessResponse<>("Quiz Submissions");
+        GetSubmissionsResponse submissionsResponse = new GetSubmissionsResponse();
+        List<Result> resultList = resultService.getSubmissions(UUID.fromString(productId));
+        submissionsResponse.setSubmissions(resultList);
+        response.data = submissionsResponse;
+        return response;
+    }
+
 }
