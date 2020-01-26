@@ -6,6 +6,7 @@ import com.quizcore.quizapp.model.network.response.BaseResponse;
 import com.quizcore.quizapp.model.network.response.ErrorResponse;
 import com.quizcore.quizapp.model.network.response.SuccessResponse;
 import com.quizcore.quizapp.model.network.response.payment.OrderResponse;
+import com.quizcore.quizapp.model.network.response.payment.GetOrdersResponse;
 import com.quizcore.quizapp.model.other.Validity;
 import com.quizcore.quizapp.service.PaymentOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Map;
 import java.util.UUID;
 
+@CrossOrigin("*")
 @RestController
 @RequestMapping("${base.endpoint}/api/v1/payment")
 public class PaymentController {
@@ -51,6 +53,15 @@ public class PaymentController {
     public OrderResponse processOrder(@PathVariable("orderId") String orderId){
 
         return null;
+    }
+
+    @GetMapping("/order")
+    public BaseResponse<GetOrdersResponse> getOrders(){
+        SuccessResponse<GetOrdersResponse> response = new SuccessResponse<>("Payment Orders");
+        GetOrdersResponse ordersResponse = new GetOrdersResponse();
+        ordersResponse.setOrders(orderService.getPaymentOrders());
+        response.data = ordersResponse;
+        return response;
     }
 
 

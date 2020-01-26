@@ -7,10 +7,7 @@ import com.quizcore.quizapp.model.repository.PaymentOrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Map;
-import java.util.Optional;
-import java.util.TreeMap;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class PaymentOrderService {
@@ -76,5 +73,10 @@ public class PaymentOrderService {
 
     private String getCheckSum(TreeMap<String, String> parameters) throws Exception {
         return CheckSumServiceHelper.getCheckSumServiceHelper().genrateCheckSum(paytmDetails.getMerchantKey(), parameters);
+    }
+
+    public List<PaymentOrder> getPaymentOrders(){
+        List<PaymentOrder> orders = (List<PaymentOrder>) orderRepository.findAll();
+        return  orders;
     }
 }

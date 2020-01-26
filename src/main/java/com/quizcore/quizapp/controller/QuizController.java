@@ -39,6 +39,15 @@ public class QuizController {
 		SuccessResponse<Object> response = new SuccessResponse<>("It works awesome");
 		return response;
 	}
+
+	@GetMapping
+	public BaseResponse<GetQuizzesResponse> getQuizzes() {
+		SuccessResponse<GetQuizzesResponse> response = new SuccessResponse<>("Quiz List");
+		GetQuizzesResponse quizzesResponse = new GetQuizzesResponse();
+		quizzesResponse.setQuizzes(quizService.getQuizzes());
+		response.data = quizzesResponse;
+		return response;
+	}
 	
 	@PostMapping("/add")
 	public SuccessResponse<AddQuizResponse> addQuiz(@RequestBody AddQuizRequest request){

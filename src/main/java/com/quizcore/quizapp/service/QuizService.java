@@ -58,6 +58,12 @@ public class QuizService implements IQuizService {
 		return savedQuiz.id;
 	}
 
+
+	public List<Quiz> getQuizzes(){
+		List<Quiz> quizzes = (List<Quiz>) quizRespository.findAll();
+		return quizzes;
+	}
+
 	private Quiz parseQuizDetails(XSSFSheet sheet){
 		System.out.println("rows " + sheet.getPhysicalNumberOfRows());
 		int i=0;
