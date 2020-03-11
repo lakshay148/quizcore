@@ -1,5 +1,6 @@
 package com.quizcore.quizapp.model.entity;
 
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
@@ -13,6 +14,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 @Entity
+@NoArgsConstructor
 public class UserActivityLog {
 
     @Id

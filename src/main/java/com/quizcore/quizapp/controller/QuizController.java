@@ -7,6 +7,7 @@ import com.quizcore.quizapp.model.entity.UserActivityLog;
 import com.quizcore.quizapp.model.network.request.quiz.AddQuizRequest;
 import com.quizcore.quizapp.model.network.request.quiz.SubmitQuizRequest;
 import com.quizcore.quizapp.model.network.response.BaseResponse;
+import com.quizcore.quizapp.model.network.response.ErrorResponse;
 import com.quizcore.quizapp.model.network.response.SuccessResponse;
 import com.quizcore.quizapp.model.network.response.quiz.*;
 import com.quizcore.quizapp.model.network.response.user.UserQuizResponse;
@@ -71,6 +72,11 @@ public class QuizController {
 		UUID quizUUID = UUID.fromString(quizId);
 		SuccessResponse<GetQuizDetailsResponse> response = new SuccessResponse<>("Quiz Details");
 		Quiz savedQuiz = quizService.getQuiz(quizUUID);
+
+		if(savedQuiz == null){
+			ErrorResponse<GetQuizDetailsResponse> errorResponse = new ErrorResponse<>("Quiz Not found", null);
+			return errorResponse;
+		}
 		savedQuiz.setQuestions(null);
 		savedQuiz.setPartnerId(null);
 
